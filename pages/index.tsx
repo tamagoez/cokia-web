@@ -1,13 +1,12 @@
-import Link from 'next/link'
-import Layout from '../components/Layout'
-
-const IndexPage = () => (
-  <Layout title="Home | Next.js + TypeScript Example">
-    <h1>Hello Next.js 👋</h1>
-    <p>
-      <Link href="/about">About</Link>
-    </p>
-  </Layout>
-)
-
-export default IndexPage
+import { Button, Heading } from "@chakra-ui/react";
+export default function IndexPage() {
+  return (
+    <>
+      <Heading>Cokia</Heading>
+      <Button colorScheme="teal" variant="solid">
+        新規登録
+      </Button>
+      <Button>ログイン</Button>
+    </>
+  );
+}
