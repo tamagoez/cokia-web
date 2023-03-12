@@ -13,7 +13,9 @@
     "@vercel/analytics": "^0.1.11",
     "framer-motion": "^10.2.4",
     "next": "latest",
+    "nookies": "^2.5.2",
     "react": "^18.2.0",
+    "react-cookie": "^4.1.1",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
