@@ -20,7 +20,6 @@ function MyApp({ Component, pageProps }: AppProps) {
       <ChakraProvider>
         <Component {...pageProps} />
       </ChakraProvider>
-
       <Analytics />
     </>
   );
