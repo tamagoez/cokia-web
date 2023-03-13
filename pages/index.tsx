@@ -1,3 +1,4 @@
+import NextLink from "next/link";
 import { Button, Heading } from "@chakra-ui/react";
 export default function IndexPage() {
   return (
@@ -6,7 +7,9 @@ export default function IndexPage() {
       <Button colorScheme="teal" variant="solid">
         新規登録
       </Button>
-      <Button>ログイン</Button>
+      <Button as={NextLink} href="/login">
+        ログイン
+      </Button>
     </>
   );
 }
