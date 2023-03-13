@@ -14,6 +14,7 @@
     "@supabase/auth-helpers-react": "^0.3.1",
     "@supabase/supabase-js": "^2.10.0",
     "@vercel/analytics": "^0.1.11",
+    "base64-arraybuffer": "^1.0.2",
     "framer-motion": "^10.2.4",
     "next": "latest",
     "nookies": "^2.5.2",
