@@ -7,6 +7,11 @@ export async function signUpWithEmailPass(
   birthday: string
 ) {
   try {
+    let baseUrl = "https://cokia.vercel.app";
+    let redirectTo = "/profile";
+    if (typeof window !== "undefined") {
+      baseUrl = location.origin;
+    }
     const { data, error } = await supabase.auth.signUp({
       email: email,
       password: password,
@@ -14,6 +19,7 @@ export async function signUpWithEmailPass(
         data: {
           birthday: birthday,
         },
+        emailRedirectTo: `${baseUrl}/callback`,
       },
     });
 

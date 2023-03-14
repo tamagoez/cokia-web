@@ -17,8 +17,11 @@ export function middleware(request: NextRequest) {
   ) {
     const endIndex = url.indexOf("/", 1) + 1;
     const targetSegment = url.substring(0, endIndex);
-    return NextResponse.redirect(
-      new URL(url.replace(targetSegment, `/p/${lang}/`))
-    );
+    const urlarray = url.split("/");
+    const redpageurl = `${targetSegment}${lang}/${
+      urlarray[urlarray.length - 1]
+    }`;
+    console.log(redpageurl);
+    return NextResponse.redirect(new URL(redpageurl, request.url));
   }
 }

@@ -88,6 +88,9 @@ export default function LoginPage() {
                 value={pass}
                 onChange={(e) => setPass(e.target.value)}
                 variant="flushed"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") loginprocess();
+                }}
               />
               <InputRightElement width="4.5rem">
                 <Button h="1.75rem" size="sm" onClick={() => setShow(!show)}>
