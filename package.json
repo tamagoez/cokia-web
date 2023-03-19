@@ -17,13 +17,16 @@
     "@tensorflow/tfjs": "^4.3.0",
     "@vercel/analytics": "^0.1.11",
     "base64-arraybuffer": "^1.0.2",
+    "canvas": "^2.11.0",
     "framer-motion": "^10.2.4",
+    "konva": "^8.4.2",
     "next": "latest",
     "nookies": "^2.5.2",
     "react": "^18.2.0",
     "react-cookie": "^4.1.1",
     "react-dom": "^18.2.0",
-    "react-icons": "^4.8.0"
+    "react-icons": "^4.8.0",
+    "react-konva": "^18.2.5"
   },
   "devDependencies": {
     "@tensorflow/tfjs-backend-webgl": "^4.3.0",
