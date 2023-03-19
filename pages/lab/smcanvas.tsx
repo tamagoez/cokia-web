@@ -45,23 +45,39 @@ const SMCanvas = () => {
     setPrevPoint(null);
   };
 
-  const draw = ({
-    nativeEvent,
-  }:
-    | React.MouseEvent<HTMLCanvasElement>
-    | React.TouchEvent<HTMLCanvasElement>) => {
-    if (!isDrawing) return;
-    const point = getPointFromEvent(nativeEvent);
-    if (prevPoint) {
-      const context = contextRef.current;
-      if (context) {
-        context.beginPath();
-        context.moveTo(prevPoint.x, prevPoint.y);
-        context.lineTo(point.x, point.y);
+  const draw = (event: React.TouchEvent<HTMLCanvasElement>) => {
+    const canvas = canvasRef.current;
+    if (!canvas) {
+      return;
+    }
+
+    const context = canvas.getContext("2d");
+    if (!context) {
+      return;
+    }
+
+    // prevent scrolling
+    event.preventDefault();
+    event.stopPropagation();
+
+    const touches = event.changedTouches;
+
+    for (let i = 0; i < touches.length; i++) {
+      const { clientX, clientY } = touches[i];
+      const { left, top } = canvas.getBoundingClientRect();
+
+      const x = clientX - left;
+      const y = clientY - top;
+
+      if (isDrawing) {
+        context.lineWidth = 10;
+        context.lineCap = "round";
+        context.lineTo(x, y);
         context.stroke();
+        context.beginPath();
+        context.moveTo(x, y);
       }
     }
-    setPrevPoint(point);
   };
 
   const saveCanvas = () => {
