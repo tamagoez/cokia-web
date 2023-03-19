@@ -19,7 +19,7 @@ const CanvasComponent: FC = () => {
   const handleMouseDown = (e) => {
     isDrawing.current = true;
     const pos = e.target.getStage().getPointerPosition();
-    setLines([...lines, { tool, points: [pos.x, pos.y] }]);
+    setLines([...lines, { tool, points: [pos.x, pos.y], strokeWidth, tension, penColor }]);
   };
 
   const handleMouseMove = (e) => {
@@ -134,9 +134,9 @@ const CanvasComponent: FC = () => {
             <Line
               key={i}
               points={line.points}
-              stroke={penColor}
-              strokeWidth={strokeWidth}
-              tension={tension}
+              stroke={line.penColor}
+              strokeWidth={line.strokeWidth}
+              tension={line.tension}
               lineCap="round"
               lineJoin="round"
               globalCompositeOperation={
