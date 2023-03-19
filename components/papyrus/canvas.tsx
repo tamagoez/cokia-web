@@ -13,6 +13,7 @@ const CanvasComponent: FC = () => {
   const [lines, setLines] = useState([]);
   const [tension, setTension] = useState(0.5);
   const [strokeWidth, setStrokeWidth] = useState(5);
+  const [penColor, setPenColor] = useState("#000000");
   const isDrawing = useRef(false);
 
   const handleMouseDown = (e) => {
@@ -58,6 +59,15 @@ const CanvasComponent: FC = () => {
           <option value="pen">Pen</option>
           <option value="eraser">Eraser</option>
         </select>
+        <input
+          type="color"
+          id="head"
+          name="head"
+          value={penColor}
+          onChange={(e) => {
+            setPenColor(e.target.value);
+          }}
+        />
         <Slider
           aria-label="slider-ex-1"
           value={strokeWidth}
@@ -124,7 +134,7 @@ const CanvasComponent: FC = () => {
             <Line
               key={i}
               points={line.points}
-              stroke="#df4b26"
+              stroke={penColor}
               strokeWidth={strokeWidth}
               tension={tension}
               lineCap="round"
