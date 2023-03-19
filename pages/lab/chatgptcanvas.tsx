@@ -7,18 +7,27 @@ const CanvasDraw: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [canvasData, setCanvasData] = useState<string | null>(null);
   const [ocrtxt, setOcrtxt] = useState("");
+  const [ocrnow, setOcrnow] = useState(false);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight - 100;
     const context = canvas?.getContext("2d");
+    // CSSを適用する
+    const style = document.createElement("style");
+    style.textContent = `canvas#${canvas.id} {-ms-touch-action: none; touch-action: none;}`;
+    document.head.appendChild(style);
 
     if (context) {
       context.lineCap = "round";
       context.strokeStyle = "black";
       context.lineWidth = 5;
     }
+    // コンポーネントのアンマウント時にCSSを削除する
+    return () => {
+      document.head.removeChild(style);
+    };
   }, []);
 
   const startDrawing = (e: TouchEvent | MouseEvent) => {
@@ -35,6 +44,9 @@ const CanvasDraw: React.FC = () => {
 
   const stopDrawing = () => {
     setDrawing(false);
+    if (ocrnow === false) {
+      parseImg();
+    }
   };
 
   const draw = (e: TouchEvent | MouseEvent) => {
@@ -88,13 +100,13 @@ const CanvasDraw: React.FC = () => {
   }, []);
 
   async function parseImg() {
-    setOcrtxt("デコード中です");
+    setOcrnow(true);
     const canvas = canvasRef.current;
     if (canvas) {
       const dataURL = canvas.toDataURL();
       setCanvasData(dataURL);
-      setOcrtxt("認識中です");
       setOcrtxt(await doOCR(dataURL));
+      setOcrnow(false);
     }
   }
 
@@ -110,6 +122,7 @@ const CanvasDraw: React.FC = () => {
         onMouseMove={draw}
       />
       <Button onClick={() => parseImg()}>文字認識</Button>
+      <p>{ocrnow ? "認識中" : "待機中"}</p>
       {ocrtxt}
     </>
   );
