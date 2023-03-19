@@ -30,7 +30,11 @@ const CanvasDraw: React.FC = () => {
     };
   }, []);
 
-  const startDrawing = (e: TouchEvent | MouseEvent) => {
+  const stopDrawing = () => {
+    setDrawing(false);
+  };
+
+  const startDrawing = (e: TouchEvent<HTMLCanvasElement> | MouseEvent) => {
     e.preventDefault();
     const canvas = canvasRef.current;
     const context = canvas?.getContext("2d");
@@ -42,14 +46,7 @@ const CanvasDraw: React.FC = () => {
     }
   };
 
-  const stopDrawing = () => {
-    setDrawing(false);
-    if (ocrnow === false) {
-      parseImg();
-    }
-  };
-
-  const draw = (e: TouchEvent | MouseEvent) => {
+  const draw = (e: TouchEvent<HTMLCanvasElement> | MouseEvent) => {
     if (drawing) {
       const canvas = canvasRef.current;
       const context = canvas?.getContext("2d");
@@ -114,14 +111,15 @@ const CanvasDraw: React.FC = () => {
     <>
       <canvas
         ref={canvasRef}
-        onTouchStart={startDrawing}
-        onTouchEnd={stopDrawing}
-        onTouchMove={draw}
+        onTouchStart={startDrawing as TouchEventHandler<HTMLCanvasElement>}
+        onTouchEnd={stopDrawing as TouchEventHandler<HTMLCanvasElement>}
+        onTouchMove={draw as TouchEventHandler<HTMLCanvasElement>}
         onMouseDown={startDrawing}
         onMouseUp={stopDrawing}
         onMouseMove={draw}
       />
-      <Button onClick={() => parseImg()}>文字認識</Button>
+
+      <Button onClick={() => canvasData && parseImg()}>文字認識</Button>
       <p>{ocrnow ? "認識中" : "待機中"}</p>
       {ocrtxt}
     </>
