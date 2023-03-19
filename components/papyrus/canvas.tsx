@@ -42,6 +42,12 @@ const CanvasComponent: FC = () => {
   };
   return (
     <div>
+      <style jsx global>{`
+        .stage {
+          -ms-touch-action: none;
+          touch-action: none;
+        }
+      `}</style>
       <div>
         <select
           value={tool}
@@ -110,6 +116,7 @@ const CanvasComponent: FC = () => {
         onTouchStart={handleMouseDown}
         onTouchMove={handleMouseMove}
         onTouchEnd={handleMouseUp}
+        className="stage"
       >
         <Layer>
           <Text text="Just start drawing" x={5} y={30} />
