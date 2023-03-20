@@ -70,6 +70,7 @@ const CanvasComponent: FC = () => {
           -moz-user-select: none;
           -webkit-user-select: none;
           -webkit-touch-callout: none;
+          -webkit-user-drag: none; 
         }
       `}</style>
       <div>
