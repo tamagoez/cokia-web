@@ -22,6 +22,7 @@ const CanvasComponent: FC = () => {
   const isDrawing = useRef(false);
 
   const handleMouseDown = (e) => {
+   // e.preventDefault()
     isDrawing.current = true;
     const pos = e.target.getStage().getPointerPosition();
     setLines([...lines, { tool, points: [pos.x, pos.y], strokeWidth, tension, penColor }]);
@@ -148,7 +149,7 @@ const CanvasComponent: FC = () => {
         onMouseDown={handleMouseDown}
         onMousemove={handleMouseMove}
         onMouseup={handleMouseUp}
-        onTouchStart={handleMouseDown}
+        onTouchStart={(e) => {e.preventDefault(); handleMouseDown(e)}
         onTouchMove={handleMouseMove}
         onTouchEnd={handleMouseUp}
         className="stage"
