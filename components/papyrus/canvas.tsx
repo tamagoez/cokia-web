@@ -90,7 +90,7 @@ const CanvasComponent: FC = () => {
           }}
         />
         <Input id="canvasname" value={canvasname} onChange={(e) => setCanvasname(e.target.value)} />
-        <IconButton onClick={() => downloadImg()} Icon={<MdOutlineSaveAlt />} />
+        <IconButton onClick={() => downloadImg()} icon={<MdOutlineSaveAlt />} />
         <Slider
           aria-label="slider-ex-1"
           value={strokeWidth}
