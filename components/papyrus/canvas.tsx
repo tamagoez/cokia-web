@@ -47,7 +47,7 @@ const CanvasComponent: FC = () => {
     isDrawing.current = false;
   };
   
-  function downloadURI() {
+  function downloadImg() {
   if (typeof window === "undefined") return;
        const name = canvasname;
        const uri = stageRef.current.toDataURL({ pixelRatio: window.devicePixelRatio})
