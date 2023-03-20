@@ -5,6 +5,7 @@ import {
   SliderThumb,
   SliderTrack,
   Input,
+  IconButton,
 } from "@chakra-ui/react";
 import { FC, useRef, useState } from "react";
 import { Stage, Layer, Text, Line } from "react-konva";
