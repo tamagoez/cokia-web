@@ -56,7 +56,7 @@ const CanvasComponent: FC = () => {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-        delete link;
+        // delete link;
       }
   return (
     <div>
