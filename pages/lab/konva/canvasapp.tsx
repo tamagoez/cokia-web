@@ -10,7 +10,7 @@ const StageComponent = dynamic(
 const CanvasPage: FC = () => {
   return <><style jsx global>{`.maincanvas {-webkit-touch-callout: none;
     -webkit-user-select: none;
-    user-select: none;}`}</style><div className="maincanvas"><StageComponent /></div></>;
+    user-select: none;}`}</style><div className="maincanvas" onTouchStart={(e) => {e.preventDefault()}}><StageComponent /></div></>;
 };
 
 export default CanvasPage;
