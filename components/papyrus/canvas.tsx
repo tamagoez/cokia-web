@@ -152,7 +152,7 @@ const CanvasComponent: FC = () => {
         className="stage"
         ref={stageRef}
       >
-      <Layer><Text text=`[${canvasname}] on Cokia` x={5} y={30} /></Layer>
+      <Layer><Text text={`[${canvasname}] on Cokia`} x={5} y={30} /></Layer>
         <Layer>
           
           {lines.map((line, i) => (
