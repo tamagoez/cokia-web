@@ -17,6 +17,7 @@ const CanvasComponent: FC = () => {
   const [strokeWidth, setStrokeWidth] = useState(5);
   const [penColor, setPenColor] = useState("#000000");
   const [canvasname, setCanvasname] = useState("New Canvas")
+  const stageRef = useRef(null)
   const isDrawing = useRef(false);
 
   const handleMouseDown = (e) => {
@@ -49,7 +50,7 @@ const CanvasComponent: FC = () => {
   if (typeof window === "undefined") return;
   const stage = e.target.getStage();
        const name = canvasname;
-       const uri = stage.toDataURL({ pixelRatio: window.devicePixelRatio})
+       const uri = stageRef.current.toDataURL({ pixelRatio: window.devicePixelRatio})
         const link = document.createElement('a');
         link.download = name;
         link.href = uri;
@@ -149,6 +150,7 @@ const CanvasComponent: FC = () => {
         onTouchMove={handleMouseMove}
         onTouchEnd={handleMouseUp}
         className="stage"
+        ref={stageRef}
       >
       <Layer><Text text=`[${canvasname}] on Cokia` x={5} y={30} /></Layer>
         <Layer>
