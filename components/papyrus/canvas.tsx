@@ -142,14 +142,14 @@ const CanvasComponent: FC = () => {
           <SliderThumb />
         </Slider>
       </div>
-      <div className="stage">
+      <div className="stage" onTouchStart={(e) => e.preventDefault()}>
       <Stage
         width={window.innerWidth}
         height={window.innerHeight}
         onMouseDown={handleMouseDown}
         onMousemove={handleMouseMove}
         onMouseup={handleMouseUp}
-        onTouchStart={(e) => {e.preventDefault(); handleMouseDown(e)}
+        onTouchStart={handleMouseDown}
         onTouchMove={handleMouseMove}
         onTouchEnd={handleMouseUp}
         className="stage"
