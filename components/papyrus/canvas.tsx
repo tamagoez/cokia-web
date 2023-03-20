@@ -141,6 +141,7 @@ const CanvasComponent: FC = () => {
           <SliderThumb />
         </Slider>
       </div>
+      <div className="stage">
       <Stage
         width={window.innerWidth}
         height={window.innerHeight}
@@ -172,6 +173,7 @@ const CanvasComponent: FC = () => {
           ))}
         </Layer>
       </Stage>
+      </div>
     </div>
   );
 };
