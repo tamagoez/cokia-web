@@ -4,9 +4,11 @@ import {
   SliderMark,
   SliderThumb,
   SliderTrack,
+  Input,
 } from "@chakra-ui/react";
 import { FC, useRef, useState } from "react";
 import { Stage, Layer, Text, Line } from "react-konva";
+import {MdOutlineSaveAlt} from "react-icons/md"
 
 const CanvasComponent: FC = () => {
   const [tool, setTool] = useState("pen");
@@ -14,6 +16,7 @@ const CanvasComponent: FC = () => {
   const [tension, setTension] = useState(0.5);
   const [strokeWidth, setStrokeWidth] = useState(5);
   const [penColor, setPenColor] = useState("#000000");
+  const [canvasname, setCanvasname] = useState("New Canvas")
   const isDrawing = useRef(false);
 
   const handleMouseDown = (e) => {
@@ -41,12 +44,29 @@ const CanvasComponent: FC = () => {
   const handleMouseUp = () => {
     isDrawing.current = false;
   };
+  
+  function downloadURI() {
+  if (typeof window === "undefined") return;
+  const stage = e.target.getStage();
+       const name = canvasname;
+       const uri = stage.toDataURL({ pixelRatio: window.devicePixelRatio})
+        const link = document.createElement('a');
+        link.download = name;
+        link.href = uri;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        delete link;
+      }
   return (
     <div>
       <style jsx global>{`
         .stage {
           -ms-touch-action: none;
           touch-action: none;
+          user-select: none;
+          -moz-user-select: none;
+          -webkit-user-select: none;
         }
       `}</style>
       <div>
@@ -68,6 +88,8 @@ const CanvasComponent: FC = () => {
             setPenColor(e.target.value);
           }}
         />
+        <Input id="canvasname" value={canvasname} onChange={(e) => setCanvasname(e.target.value)} />
+        <IconButton onClick={() => downloadImg()} Icon={<MdOutlineSaveAlt />} />
         <Slider
           aria-label="slider-ex-1"
           value={strokeWidth}
@@ -128,8 +150,9 @@ const CanvasComponent: FC = () => {
         onTouchEnd={handleMouseUp}
         className="stage"
       >
+      <Layer><Text text=`[${canvasname}] on Cokia` x={5} y={30} /></Layer>
         <Layer>
-          <Text text="Just start drawing" x={5} y={30} />
+          
           {lines.map((line, i) => (
             <Line
               key={i}
