@@ -48,7 +48,6 @@ const CanvasComponent: FC = () => {
   
   function downloadURI() {
   if (typeof window === "undefined") return;
-  const stage = e.target.getStage();
        const name = canvasname;
        const uri = stageRef.current.toDataURL({ pixelRatio: window.devicePixelRatio})
         const link = document.createElement('a');
