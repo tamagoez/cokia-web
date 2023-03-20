@@ -2,7 +2,7 @@ import { FC } from "react";
 import dynamic from "next/dynamic";
 
 const StageComponent = dynamic(
-  () => import("../../../components/papyrus/canvas"),
+  () => import("../../../components/papyrus/canvasold"),
   {
     ssr: false,
   }
