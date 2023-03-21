@@ -1,5 +1,6 @@
 import { FC, useRef, useState } from "react";
 import { Stage, Layer, Text, Line } from "react-konva";
+// import { Box } from "@chakra-ui/react";
 
 export default function EditorCanvas({ tool }: { tool: string }) {
   const [lines, setLines] = useState([]);
