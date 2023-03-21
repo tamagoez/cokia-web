@@ -22,13 +22,14 @@ const CanvasComponent: FC = () => {
   const isDrawing = useRef(false);
 
   const handleMouseDown = (e) => {
-    // e.preventDefault()
+    e.evt.preventDefault()
     isDrawing.current = true;
     const pos = e.target.getStage().getPointerPosition();
     setLines([...lines, { tool, points: [pos.x, pos.y], strokeWidth, tension, penColor }]);
   };
 
   const handleMouseMove = (e) => {
+    e.evt.preventDefault()
     // no drawing - skipping
     if (!isDrawing.current) {
       return;
