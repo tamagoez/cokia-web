@@ -5,7 +5,7 @@ const EditorCanvas = dynamic(() => import("canvas"), {
   ssr: false,
 });
 
-export default function EditorPage() {
+const EditorPage: FC = () => {
   const [tool, setTool] = useState("pen");
   return (
     <>
@@ -21,7 +21,8 @@ export default function EditorPage() {
       </div>
     </>
   );
-}
+};
+export default EditorPage;
 
 function EditorControls({ tool, setTool }: { tool: string; setTool: any }) {
   return (
