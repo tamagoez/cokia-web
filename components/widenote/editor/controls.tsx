@@ -95,47 +95,46 @@ function PenOptionControl({
   return (
     <div id="pen-option-control">
       <Box bg="gray.100" w="400px" p={4} color="gray.600" borderRadius="xl">
-        <Center>
-          <Flex>
-            <Box w="10px">
-              <input
-                type="color"
-                id="head"
-                name="head"
-                value={penColor}
-                onChange={(e) => {
-                  setPenColor(e.target.value);
-                }}
-              />
-            </Box>
-            <Box flex="1">
-              <Slider
-                aria-label="slider-ex-1"
+        <Flex>
+          <Center w="10px">
+            <input
+              type="color"
+              id="head"
+              name="head"
+              value={penColor}
+              onChange={(e) => {
+                setPenColor(e.target.value);
+              }}
+            />
+          </Center>
+          <Box flex="1">
+            <Slider
+              aria-label="slider-ex-1"
+              value={strokeWidth}
+              onChange={(val) => setStrokeWidth(val)}
+              min={0}
+              max={50}
+              step={0.1}
+              w="100%"
+            >
+              <SliderMark
                 value={strokeWidth}
-                onChange={(val) => setStrokeWidth(val)}
-                min={0}
-                max={50}
-                step={0.1}
+                textAlign="center"
+                bg="blue.500"
+                color="white"
+                mb="-10"
+                ml="-6"
+                w="14"
               >
-                <SliderMark
-                  value={strokeWidth}
-                  textAlign="center"
-                  bg="blue.500"
-                  color="white"
-                  mb="-10"
-                  ml="-6"
-                  w="14"
-                >
-                  {strokeWidth} pt
-                </SliderMark>
-                <SliderTrack>
-                  <SliderFilledTrack />
-                </SliderTrack>
-                <SliderThumb />
-              </Slider>
-            </Box>
-          </Flex>
-        </Center>
+                {strokeWidth} pt
+              </SliderMark>
+              <SliderTrack>
+                <SliderFilledTrack />
+              </SliderTrack>
+              <SliderThumb />
+            </Slider>
+          </Box>
+        </Flex>
       </Box>
     </div>
   );
