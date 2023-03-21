@@ -1,3 +1,4 @@
+import { useState } from "react";
 import dynamic from "next/dynamic";
 
 const EditorCanvas = dynamic(() => import("../canvas"), {
@@ -5,6 +6,7 @@ const EditorCanvas = dynamic(() => import("../canvas"), {
 });
 
 export default function EditorPage() {
+  const [tool, setTool] = useState("pen");
   return (
     <>
       <style jsx global>{`#editor-controls {width: 100vw;
@@ -12,19 +14,27 @@ export default function EditorPage() {
     position: fixed;
     z-index: 801;}`}</style>
       <div id="editor-canvas">
-        <EditorCanvas />
+        <EditorCanvas tool={tool} />
       </div>
       <div id="editor-controls">
-        <EditorControls />
+        <EditorControls tool={tool} setTool={(newState) => setTool(newState)} />
       </div>
     </>
   );
 }
 
-function EditorControls() {
+function EditorControls({ tool, setTool }: { tool: string; setTool: any }) {
   return (
     <>
-      <p>a</p>
+      <select
+        value={tool}
+        onChange={(e) => {
+          setTool(e.target.value);
+        }}
+      >
+        <option value="pen">Pen</option>
+        <option value="eraser">Eraser</option>
+      </select>
     </>
   );
 }
