@@ -6,6 +6,10 @@ import {
   SliderTrack,
   Input,
   IconButton,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
 } from "@chakra-ui/react";
 import { FC, useRef, useState } from "react";
 import { Stage, Layer, Text, Line } from "react-konva";
@@ -56,9 +60,11 @@ const CanvasComponent: FC = () => {
         downloadUri(name, uri)
   }
   function downloadJSON() {
+    if (typeof window === "undefined") return;
     const json = JSON.stringify(stageRef.current.toJSON());
     const blob = new Blob([json], {type: "application/json"});
-    downloadUri(canvasname, blob)
+    const uri = window.URL.createObjectURL(blob)
+    downloadUri(canvasname, uri)
   }
   function downloadUri(name, uri) {
     const link = document.createElement('a');
@@ -102,8 +108,15 @@ const CanvasComponent: FC = () => {
           }}
         />
         <Input id="canvasname" value={canvasname} onChange={(e) => setCanvasname(e.target.value)} />
-        <IconButton onClick={() => downloadImg()} aria-label="Save PNG" icon={<MdOutlineSaveAlt />} />
-        <IconButton onClick={() => downloadJSON()} aria-label="Save JSON" icon={<MdOutlineSaveAlt />} />
+        <Menu>
+          <MenuButton as={Button} rightIcon={<MdOutlineSaveAlt />}>
+            Save
+          </MenuButton>
+          <MenuList>
+            <MenuItem>Download PNG Image</MenuItem>
+            <MenuItem>Download JSON (raw data)</MenuItem>
+          </MenuList>
+        </Menu>
         <Slider
           aria-label="slider-ex-1"
           value={strokeWidth}
@@ -133,7 +146,7 @@ const CanvasComponent: FC = () => {
           value={tension}
           onChange={(val) => setTension(val)}
           min={0}
-          max={10}
+          max={1}
           step={0.1}
         >
           <SliderMark
@@ -166,9 +179,8 @@ const CanvasComponent: FC = () => {
         className="stage"
         ref={stageRef}
       >
-      <Layer><Text text={`${canvasname} on Cokia WideLeaf`} x={5} y={5} /></Layer>
-        <Layer>
-          
+      <Layer><Text text={`${canvasname} on Cokia WideNote`} x={5} y={5} /></Layer>
+        <Layer> 
           {lines.map((line, i) => (
             <Line
               key={i}
