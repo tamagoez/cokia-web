@@ -124,7 +124,7 @@ function PenOptionControl({
       <Box
         bg="gray.100"
         w="50vw"
-        maxW="400px"
+        maxW="1200px"
         p={4}
         color="gray.600"
         borderRadius="xl"
