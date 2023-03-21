@@ -50,17 +50,25 @@ const CanvasComponent: FC = () => {
   };
   
   function downloadImg() {
-  if (typeof window === "undefined") return;
+    if (typeof window === "undefined") return;
        const name = canvasname;
        const uri = stageRef.current.toDataURL({ pixelRatio: window.devicePixelRatio})
-        const link = document.createElement('a');
+        downloadUri(name, uri)
+  }
+  function downloadJSON() {
+    const json = JSON.stringify(stageRef.current.toJSON());
+    const blob = new Blob([json], {type: "application/json"});
+    downloadUri(canvasname, blob)
+  }
+  function downloadUri(name, uri) {
+    const link = document.createElement('a');
         link.download = name;
         link.href = uri;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
         // delete link;
-      }
+  }
   return (
     <div>
       <style jsx global>{`
@@ -94,7 +102,8 @@ const CanvasComponent: FC = () => {
           }}
         />
         <Input id="canvasname" value={canvasname} onChange={(e) => setCanvasname(e.target.value)} />
-        <IconButton onClick={() => downloadImg()} aria-label="Save" icon={<MdOutlineSaveAlt />} />
+        <IconButton onClick={() => downloadImg()} aria-label="Save PNG" icon={<MdOutlineSaveAlt />} />
+        <IconButton onClick={() => downloadJSON()} aria-label="Save JSON" icon={<MdOutlineSaveAlt />} />
         <Slider
           aria-label="slider-ex-1"
           value={strokeWidth}
@@ -157,7 +166,7 @@ const CanvasComponent: FC = () => {
         className="stage"
         ref={stageRef}
       >
-      <Layer><Text text={`[${canvasname}] on Cokia`} x={5} y={30} /></Layer>
+      <Layer><Text text={`${canvasname} on Cokia WideLeaf`} x={5} y={5} /></Layer>
         <Layer>
           
           {lines.map((line, i) => (
