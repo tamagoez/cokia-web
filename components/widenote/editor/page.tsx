@@ -13,7 +13,11 @@ export default function EditorPage() {
   return (
     <>
       <div id="editor-canvas">
-        <EditorCanvas tool={tool} />
+        <EditorCanvas
+          tool={tool}
+          strokeWidth={strokeWidth}
+          penColor={penColor}
+        />
       </div>
       <div id="editor-controls">
         <EditorControls
