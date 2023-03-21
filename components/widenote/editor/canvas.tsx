@@ -1,8 +1,8 @@
 import { FC, useRef, useState } from "react";
 import { Stage, Layer, Text, Line } from "react-konva";
 
-const EditorCanvas: FC = () => {
-  const [tool, setTool] = useState("pen")
+export default function EditorCanvas() {
+  const [tool, setTool] = useState("pen");
   const [lines, setLines] = useState([]);
   const [tension, setTension] = useState(0.5);
   const [strokeWidth, setStrokeWidth] = useState(5);
@@ -84,6 +84,4 @@ const EditorCanvas: FC = () => {
       </Stage>
     </>
   );
-};
-
-export default EditorCanvas;
+}
