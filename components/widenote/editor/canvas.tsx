@@ -11,16 +11,18 @@ export default function EditorCanvas({ tool }: { tool: string }) {
   const isDrawing = useRef(false);
 
   const handleMouseDown = (e) => {
+    if (tool === "cursor") return;
     e.evt.preventDefault();
     isDrawing.current = true;
     const pos = e.target.getStage().getPointerPosition();
     setLines([
       ...lines,
-      { tool, points: [pos.x, pos.y], strokeWidth, tension, penColor },
+      { tool, points: [pos.x, pos.y], strokeWidth, penColor },
     ]);
   };
 
   const handleMouseMove = (e) => {
+    if (tool === "cursor") return;
     e.evt.preventDefault();
     // no drawing - skipping
     if (!isDrawing.current) {
@@ -72,7 +74,7 @@ export default function EditorCanvas({ tool }: { tool: string }) {
               points={line.points}
               stroke={line.penColor}
               strokeWidth={line.strokeWidth}
-              tension={line.tension}
+              tension={0.5}
               lineCap="round"
               lineJoin="round"
               globalCompositeOperation={

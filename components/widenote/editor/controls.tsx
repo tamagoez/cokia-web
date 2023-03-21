@@ -1,5 +1,5 @@
-import { Box } from "@chakra-ui/react";
-import { FaPen, FaEraser } from "react-icons/fa";
+import { IconButton, Box } from "@chakra-ui/react";
+import { FaPen, FaEraser, FaArrowsAlt } from "react-icons/fa";
 
 export default function EditorControls({
   tool,
@@ -24,6 +24,12 @@ export default function EditorControls({
         isActive={tool === "eraser"}
         aria-label="Eraser"
         icon={<FaEraser />}
+      />
+      <IconButton
+        variant="ghost"
+        isActive={tool === "cursor"}
+        aria-label="Cursor"
+        icon={<FaArrowsAlt />}
       />
     </>
   );
