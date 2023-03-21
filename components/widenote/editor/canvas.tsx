@@ -1,8 +1,7 @@
 import { FC, useRef, useState } from "react";
 import { Stage, Layer, Text, Line } from "react-konva";
 
-export default function EditorCanvas() {
-  const [tool, setTool] = useState("pen");
+export default function EditorCanvas({ tool }: { tool: string }) {
   const [lines, setLines] = useState([]);
   const [tension, setTension] = useState(0.5);
   const [strokeWidth, setStrokeWidth] = useState(5);
