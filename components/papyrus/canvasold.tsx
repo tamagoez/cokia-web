@@ -10,6 +10,7 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
+  Button,
 } from "@chakra-ui/react";
 import { FC, useRef, useState } from "react";
 import { Stage, Layer, Text, Line } from "react-konva";
@@ -113,8 +114,8 @@ const CanvasComponent: FC = () => {
             Save
           </MenuButton>
           <MenuList>
-            <MenuItem>Download PNG Image</MenuItem>
-            <MenuItem>Download JSON (raw data)</MenuItem>
+            <MenuItem onClick={() => {downloadImg()}}>Download PNG Image</MenuItem>
+            <MenuItem onClick={() => {downloadJSON()}}>Download JSON (raw data)</MenuItem>
           </MenuList>
         </Menu>
         <Slider
