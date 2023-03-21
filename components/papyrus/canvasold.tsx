@@ -22,7 +22,7 @@ const CanvasComponent: FC = () => {
   const isDrawing = useRef(false);
 
   const handleMouseDown = (e) => {
-   // e.preventDefault()
+    // e.preventDefault()
     isDrawing.current = true;
     const pos = e.target.getStage().getPointerPosition();
     setLines([...lines, { tool, points: [pos.x, pos.y], strokeWidth, tension, penColor }]);
@@ -143,7 +143,7 @@ const CanvasComponent: FC = () => {
           <SliderThumb />
         </Slider>
       </div>
-      <div className="stage" onTouchStart={(e) => e.preventDefault()}>
+      <div className="stage" onTouchStart={(e) => {e.preventDefault()}} onTouchMove={(e) => {e.preventDefault()}}>
       <Stage
         width={window.innerWidth}
         height={window.innerHeight}
