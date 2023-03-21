@@ -79,7 +79,7 @@ export default function EditorControls({
 function CursorModeControl({ tool, setTool }: { tool: string; setTool: any }) {
   return (
     <div id="cursor-mode-control">
-      <Box bg="gray.100" w="200px" p={2} color="gray.600" borderRadius="xl">
+      <Box bg="gray.100" w="15px" p={2} color="gray.600" borderRadius="xl">
         <Center>
           <IconButton
             variant="ghost"
@@ -121,9 +121,9 @@ function PenOptionControl({
 }) {
   return (
     <div id="pen-option-control">
-      <Box bg="gray.100" w="400px" p={4} color="gray.600" borderRadius="xl">
+      <Box bg="gray.100" w="60%" p={4} color="gray.600" borderRadius="xl">
         <Flex>
-          <Center w="20px">
+          <Center w="40px">
             <input
               type="color"
               id="head"
@@ -198,7 +198,7 @@ function NoteOptionControl({
   }
   return (
     <div id="note-option-control">
-      <Box bg="gray.100" w="200px" p={2} color="gray.600" borderRadius="xl">
+      <Box bg="gray.100" w="100px" p={2} color="gray.600" borderRadius="xl">
         <Center>
           <Menu>
             <MenuButton
