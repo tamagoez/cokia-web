@@ -8,19 +8,22 @@ const EditorCanvas = dynamic(() => import("./canvas"), {
 
 export default function EditorPage() {
   const [tool, setTool] = useState("pen");
+  const [strokeWidth, setStrokeWidth] = useState(5);
+  const [penColor, setPenColor] = useState("#000000");
   return (
     <>
-      <style jsx global>{`#editor-controls {width: 100vw;
-    height: 100vh;
-    position: fixed;
-    z-index: 801;
-    top: 0;
-    left: 0;}`}</style>
       <div id="editor-canvas">
         <EditorCanvas tool={tool} />
       </div>
       <div id="editor-controls">
-        <EditorControls tool={tool} setTool={(newState) => setTool(newState)} />
+        <EditorControls
+          tool={tool}
+          setTool={(newState) => setTool(newState)}
+          strokeWidth={strokeWidth}
+          setStrokeWidth={(newstate) => setStrokeWidth(newstate)}
+          penColor={penColor}
+          setPenColor={(newstate) => setPenColor(newstate)}
+        />
       </div>
     </>
   );

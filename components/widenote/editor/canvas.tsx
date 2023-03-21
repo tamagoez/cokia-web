@@ -2,11 +2,17 @@ import { FC, useRef, useState } from "react";
 import { Stage, Layer, Text, Line } from "react-konva";
 // import { Box } from "@chakra-ui/react";
 
-export default function EditorCanvas({ tool }: { tool: string }) {
+export default function EditorCanvas({
+  tool,
+  strokeWidth,
+  penColor,
+}: {
+  tool: string;
+  strokeWidth: number;
+  penColor: string;
+}) {
   const [lines, setLines] = useState([]);
   const [tension, setTension] = useState(0.5);
-  const [strokeWidth, setStrokeWidth] = useState(5);
-  const [penColor, setPenColor] = useState("#000000");
   const stageRef = useRef(null);
   const isDrawing = useRef(false);
 
