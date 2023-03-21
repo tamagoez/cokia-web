@@ -29,12 +29,12 @@ export default function EditorControls({
   return (
     <>
       <style jsx global>{`#cursor-mode-control {
-            display: fixed;
+            position: fixed;
             bottom: 10px;
             left: 10px;
             }     
           #pen-option-control {
-            display: fixed;
+            position: fixed;
             bottom: 10px;
             right: 10px;
           }`}</style>
@@ -52,7 +52,7 @@ export default function EditorControls({
 function CursorModeControl({ tool, setTool }: { tool: string; setTool: any }) {
   return (
     <div id="cursor-mode-control">
-      <Box bg="gray.100" w="200px" p={4} color="gray.600" borderRadius="xl">
+      <Box bg="gray.100" w="200px" p={2} color="gray.600" borderRadius="xl">
         <Center>
           <IconButton
             variant="ghost"
@@ -97,7 +97,7 @@ function PenOptionControl({
       <Box bg="gray.100" w="400px" p={4} color="gray.600" borderRadius="xl">
         <Center>
           <Flex>
-            <Box>
+            <Box w="10px">
               <input
                 type="color"
                 id="head"
@@ -116,7 +116,6 @@ function PenOptionControl({
                 min={0}
                 max={50}
                 step={0.1}
-                width="100%"
               >
                 <SliderMark
                   value={strokeWidth}
