@@ -1,5 +1,6 @@
 import { useState } from "react";
-import dynamic from "next/dynamic"
+import dynamic from "next/dynamic";
+import EditorControls from "./controls";
 
 const EditorCanvas = dynamic(() => import("./canvas"), {
   ssr: false,
