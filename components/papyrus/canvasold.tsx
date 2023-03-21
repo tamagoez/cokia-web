@@ -66,9 +66,9 @@ const CanvasComponent: FC = () => {
         .stage {
           -ms-touch-action: none;
           touch-action: none;
-          user-select: none;
           -moz-user-select: none;
           -webkit-user-select: none;
+          user-select: none;
           -webkit-touch-callout: none;
           -webkit-user-drag: none; 
         }
