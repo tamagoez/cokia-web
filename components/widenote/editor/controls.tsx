@@ -8,10 +8,19 @@ import {
   IconButton,
   Box,
   Center,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Input,
 } from "@chakra-ui/react";
 import { FaPen, FaEraser, FaArrowsAlt } from "react-icons/fa";
+import { MdIosShare } from "react-icons/md";
 
 export default function EditorControls({
+  stageRef,
+  notename,
+  setNotename,
   tool,
   setTool,
   strokeWidth,
@@ -19,6 +28,9 @@ export default function EditorControls({
   penColor,
   setPenColor,
 }: {
+  stageRef: any;
+  notename: string;
+  setNotename: any;
   tool: string;
   setTool: any;
   strokeWidth: number;
@@ -31,12 +43,22 @@ export default function EditorControls({
       <style jsx global>{`#cursor-mode-control {
             position: fixed;
             bottom: 10px;
-            left: 10px;
+            left: 15px;
             }     
           #pen-option-control {
             position: fixed;
             bottom: 10px;
-            right: 10px;
+            right: 15px;
+          }
+          #note-option-control {
+            position: fixed;
+            top: 10px;
+            right: 15px;
+          }
+          #note-setting-control {
+            position: fixed;
+            top: 10px;
+            left: 15px;
           }`}</style>
       <CursorModeControl tool={tool} setTool={setTool} />
       <PenOptionControl
@@ -44,6 +66,11 @@ export default function EditorControls({
         setStrokeWidth={(newstate) => setStrokeWidth(newstate)}
         penColor={penColor}
         setPenColor={(newstate) => setPenColor(newstate)}
+      />
+      <NoteOptionControl stageRef={stageRef} notename={notename} />
+      <NoteSettingControl
+        notename={notename}
+        setNotename={(newstate) => setNotename(newstate)}
       />
     </>
   );
@@ -96,7 +123,7 @@ function PenOptionControl({
     <div id="pen-option-control">
       <Box bg="gray.100" w="400px" p={4} color="gray.600" borderRadius="xl">
         <Flex>
-          <Center w="10px">
+          <Center w="20px">
             <input
               type="color"
               id="head"
@@ -135,6 +162,77 @@ function PenOptionControl({
             </Slider>
           </Box>
         </Flex>
+      </Box>
+    </div>
+  );
+}
+
+function NoteOptionControl({
+  stageRef,
+  notename,
+}: {
+  stageRef: any;
+  notename: string;
+}) {
+  function downloadImg() {
+    const name = notename;
+    const uri = stageRef.current.toDataURL({
+      pixelRatio: window.devicePixelRatio,
+    });
+    downloadUri(name, uri);
+  }
+  function downloadJSON() {
+    const json = JSON.stringify(stageRef.current.toJSON());
+    const blob = new Blob([json], { type: "application/json" });
+    const uri = window.URL.createObjectURL(blob);
+    downloadUri(notename, uri);
+  }
+  function downloadUri(name, uri) {
+    const link = document.createElement("a");
+    link.download = name;
+    link.href = uri;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    // delete link;
+  }
+  return (
+    <div id="note-option-control">
+      <Box bg="gray.100" w="200px" p={2} color="gray.600" borderRadius="xl">
+        <Center>
+          <Menu>
+            <MenuButton
+              as={IconButton}
+              aria-label="Share"
+              icon={<MdIosShare />}
+              variant="ghost"
+            />
+            <MenuList>
+              <MenuItem onClick={() => downloadImg()}>Download PNG</MenuItem>
+              <MenuItem onClick={() => downloadJSON()}>Download JSON</MenuItem>
+            </MenuList>
+          </Menu>
+        </Center>
+      </Box>
+    </div>
+  );
+}
+
+function NoteSettingControl({
+  notename,
+  setNotename,
+}: {
+  notename: string;
+  setNotename: any;
+}) {
+  return (
+    <div id="note-setting-control">
+      <Box bg="gray.100" w="200px" p={2} color="gray.600" borderRadius="xl">
+        <Input
+          placeholder="Note Name"
+          value={notename}
+          onChange={(e) => setNotename(e.target.value)}
+        />
       </Box>
     </div>
   );

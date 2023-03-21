@@ -6,14 +6,15 @@ export default function EditorCanvas({
   tool,
   strokeWidth,
   penColor,
+  stageRef,
 }: {
   tool: string;
   strokeWidth: number;
   penColor: string;
+  stageRef: any;
 }) {
   const [lines, setLines] = useState([]);
   const [tension, setTension] = useState(0.5);
-  const stageRef = useRef(null);
   const isDrawing = useRef(false);
 
   const handleMouseDown = (e) => {
