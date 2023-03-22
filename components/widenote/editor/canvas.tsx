@@ -22,7 +22,7 @@ export default function EditorCanvas({
   const [lastDist, setLastDist] = useState(0);
   Konva.hitOnDragEnabled = true;
   
-  const doMultiMove = () => cursorMove(e, stageRef, lastCenter, (newState) => setLastCenter(newState), lastDiff, (newState) => setLastDiff(newState))
+  const doMultiMove = (e) => cursorMove(e, stageRef, lastCenter, (newState) => setLastCenter(newState), lastDiff, (newState) => setLastDiff(newState))
 
   const handleMouseDown = (e) => {
     e.evt.preventDefault();
@@ -37,8 +37,7 @@ export default function EditorCanvas({
 
   const handleMouseMove = (e) => {
     e.evt.preventDefault();
-    if (tool === "cursor") doMultiMove();
-    
+    if (tool === "cursor") doMultiMove(e);
     // no drawing - skipping
     if (!isDrawing.current) {
       return;
