@@ -171,5 +171,5 @@ function cursorMove(e: any, stageRef: any, lastCenter, setLastCenter, lastDist, 
           setLastDist(dist);
           setLastCenter(newCenter);
         }
-      });
+     
 }
