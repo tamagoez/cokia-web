@@ -22,7 +22,7 @@ export default function EditorCanvas({
   const [lastDist, setLastDist] = useState(0);
   Konva.hitOnDragEnabled = true;
   
-  const doMultiMove = (e) => cursorMove(e, stageRef, lastCenter, (newState) => setLastCenter(newState), lastDiff, (newState) => setLastDiff(newState))
+  const doMultiMove = (e) => cursorMove(e, stageRef, lastCenter, (newState) => setLastCenter(newState), lastDist, (newState) => setLastDist(newState))
 
   const handleMouseDown = (e) => {
     e.evt.preventDefault();
