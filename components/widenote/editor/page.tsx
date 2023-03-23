@@ -51,7 +51,6 @@ export default function EditorPage() {
           stageRef={stageRef}
           tension={tension}
           opacity={opacity}
-          leftPadding={leftPadding}
           stageX={stageX}
           stageY={stageY}
           stageColor={stageColor}

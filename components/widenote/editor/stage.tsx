@@ -10,6 +10,7 @@ export default function CanvasStage({
   setLeftPadding,
   stageWidth,
   stageHeight,
+  stageColor,
 }: {
   tool: string;
   stageX: number;
@@ -20,6 +21,7 @@ export default function CanvasStage({
   setLeftPadding: any;
   stageWidth: number;
   stageHeight: number;
+  stageColor: string;
 }) {
   // サイズ変更
   useEffect(() => {
