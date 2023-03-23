@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import dynamic from "next/dynamic";
 import EditorControls from "./controls";
+import CanvasStage from "./stage";
 
 const EditorCanvas = dynamic(() => import("./canvas"), {
   ssr: false,
@@ -14,8 +15,10 @@ export default function EditorPage() {
   const [penColor, setPenColor] = useState("#000000");
   const [tension, setTension] = useState(0.5);
   const [opacity, setOpacity] = useState(1);
+  const [leftPadding, setLeftPadding] = useState(100);
   return (
     <>
+      <CanvasStage tool={tool} />
       <div id="editor-canvas">
         <EditorCanvas
           tool={tool}

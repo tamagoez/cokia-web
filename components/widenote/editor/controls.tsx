@@ -53,21 +53,25 @@ export default function EditorControls({
           position: fixed;
           bottom: 10px;
           left: 15px;
+          z-index: 1000;
         }
         #pen-option-control {
           position: fixed;
           bottom: 10px;
           right: 15px;
+          z-index: 1000;
         }
         #note-option-control {
           position: fixed;
           top: 10px;
           right: 15px;
+          z-index: 1000;
         }
         #note-setting-control {
           position: fixed;
           top: 10px;
           left: 15px;
+          z-index: 1000;
         }
       `}</style>
       <CursorModeControl tool={tool} setTool={setTool} />
@@ -193,7 +197,7 @@ function PenOptionControl({
               w="100%"
             >
               <SliderMark
-                value={strokeWidth}
+                value={opacity * 100}
                 textAlign="center"
                 bg="blue.500"
                 color="white"

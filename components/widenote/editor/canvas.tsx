@@ -38,7 +38,7 @@ export default function EditorCanvas({
 
   const handleMouseMove = (e) => {
     e.evt.preventDefault();
-    if (tool === "cursor") {
+    if (null === "cursor") {
       cursorMove(
         e,
         stageRef,
@@ -80,11 +80,16 @@ export default function EditorCanvas({
           user-select: none;
           -webkit-touch-callout: none;
           -webkit-user-drag: none;
+          z-index: 10;
+          width: 100vw;
+          height: 100vh;
+          top: 0;
+          left: 0;
         }
       `}</style>
       <Stage
-        width={window.innerWidth}
-        height={window.innerHeight}
+        width={window.innerWidth + 200}
+        height={window.innerHeight + 200}
         onMouseDown={handleMouseDown}
         onMousemove={handleMouseMove}
         onMouseup={handleMouseUp}
@@ -93,6 +98,7 @@ export default function EditorCanvas({
         onTouchEnd={handleMouseUp}
         className="stage"
         ref={stageRef}
+        style={{ position: tool === "cursor" ? "fixed" : "fixed" }}
       >
         <Layer>
           {lines.map((line, i) => (
