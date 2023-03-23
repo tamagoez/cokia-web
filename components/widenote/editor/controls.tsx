@@ -163,10 +163,6 @@ function PenOptionControl({
   setPenColor,
   opacity,
   setOpacity,
-  stageWidth,
-  setStageWidth,
-  stageHeight,
-  setStageHeight,
 }: {
   strokeWidth: number;
   setStrokeWidth: any;
@@ -174,10 +170,6 @@ function PenOptionControl({
   setPenColor: any;
   opacity: number;
   setOpacity: any;
-  stageWidth: number;
-  setStageWidth: any;
-  stageHeight: number;
-  setStageHeight: any;
 }) {
   return (
     <div id="pen-option-control">

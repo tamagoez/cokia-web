@@ -142,5 +142,5 @@ function updatePreview(stageRef: any) {
   const scale = 1 / 12;
   // use pixelRatio to generate smaller preview
   const url = stage.toDataURL({ pixelRatio: scale });
-  (document.getElementById("preview") as HTMLImageElement).src = url;
+  (document.getElementById("preview") as HTMLImageElementae).src = url;
 }
