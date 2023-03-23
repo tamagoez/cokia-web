@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import dynamic from "next/dynamic";
 import EditorControls from "./controls";
 import CanvasStage from "./stage";
@@ -13,12 +13,36 @@ export default function EditorPage() {
   const [tool, setTool] = useState("pen");
   const [strokeWidth, setStrokeWidth] = useState(5);
   const [penColor, setPenColor] = useState("#000000");
+  const [stageColor, setStageColor] = useState("#FFFFFF");
   const [tension, setTension] = useState(0.5);
   const [opacity, setOpacity] = useState(1);
   const [leftPadding, setLeftPadding] = useState(100);
+  const [stageX, setStageX] = useState(1000);
+  const [stageY, setStageY] = useState(1000);
+  const [stageWidth, setStageWidth] = useState(0);
+  const [stageHeight, setStageHeight] = useState(0);
+
+  useEffect(() => {
+    setStageWidth(window.innerWidth + 2000);
+    setStageHeight(window.innerHeight + 2000);
+    setStageX(1000);
+    setStageY(1000);
+    window.scroll(stageX, stageY);
+  }, []);
   return (
     <>
-      <CanvasStage tool={tool} />
+      <CanvasStage
+        tool={tool}
+        leftPadding={leftPadding}
+        setLeftPadding={(newState) => setLeftPadding(newState)}
+        stageX={stageX}
+        setStageX={(newState) => setStageX(newState)}
+        stageY={stageY}
+        setStageY={(newState) => setStageY(newState)}
+        stageColor={stageColor}
+        stageWidth={stageWidth}
+        stageHeight={stageHeight}
+      />
       <div id="editor-canvas">
         <EditorCanvas
           tool={tool}
@@ -27,6 +51,10 @@ export default function EditorPage() {
           stageRef={stageRef}
           tension={tension}
           opacity={opacity}
+          leftPadding={leftPadding}
+          stageX={stageX}
+          stageY={stageY}
+          stageColor={stageColor}
         />
       </div>
       <div id="editor-controls">
@@ -44,6 +72,12 @@ export default function EditorPage() {
           setTension={(newstate) => setTension(newstate)}
           opacity={opacity}
           setOpacity={(newState) => setOpacity(newState)}
+          stageColor={stageColor}
+          setStageColor={(newState) => setStageColor(newState)}
+          stageWidth={stageWidth}
+          setStageWidth={(newState) => setStageWidth(newState)}
+          stageHeight={stageHeight}
+          setStageHeight={(newState) => setStageHeight(newState)}
         />
       </div>
     </>

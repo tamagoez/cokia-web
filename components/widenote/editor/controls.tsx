@@ -13,9 +13,23 @@ import {
   MenuList,
   MenuItem,
   Input,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
+  Button,
 } from "@chakra-ui/react";
 import { FaPen, FaEraser, FaArrowsAlt } from "react-icons/fa";
-import { MdIosShare } from "react-icons/md";
+import { MdIosShare, MdSettings } from "react-icons/md";
 
 export default function EditorControls({
   stageRef,
@@ -31,6 +45,12 @@ export default function EditorControls({
   setTension,
   opacity,
   setOpacity,
+  stageColor,
+  setStageColor,
+  stageWidth,
+  setStageWidth,
+  stageHeight,
+  setStageHeight,
 }: {
   stageRef: any;
   notename: string;
@@ -45,6 +65,12 @@ export default function EditorControls({
   setTension: any;
   opacity: number;
   setOpacity: any;
+  stageColor: string;
+  setStageColor: any;
+  stageWidth: number;
+  setStageWidth: any;
+  stageHeight: number;
+  setStageHeight: any;
 }) {
   return (
     <>
@@ -87,6 +113,12 @@ export default function EditorControls({
       <NoteSettingControl
         notename={notename}
         setNotename={(newstate) => setNotename(newstate)}
+        stageColor={stageColor}
+        setStageColor={(newState) => setStageColor(newState)}
+        stageWidth={stageWidth}
+        setStageWidth={(newState) => setStageWidth(newState)}
+        stageHeight={stageHeight}
+        setStageHeight={(newState) => setStageHeight(newState)}
       />
     </>
   );
@@ -131,6 +163,10 @@ function PenOptionControl({
   setPenColor,
   opacity,
   setOpacity,
+  stageWidth,
+  setStageWidth,
+  stageHeight,
+  setStageHeight,
 }: {
   strokeWidth: number;
   setStrokeWidth: any;
@@ -138,6 +174,10 @@ function PenOptionControl({
   setPenColor: any;
   opacity: number;
   setOpacity: any;
+  stageWidth: number;
+  setStageWidth: any;
+  stageHeight: number;
+  setStageHeight: any;
 }) {
   return (
     <div id="pen-option-control">
@@ -273,19 +313,85 @@ function NoteOptionControl({
 function NoteSettingControl({
   notename,
   setNotename,
+  stageColor,
+  setStageColor,
+  stageWidth,
+  setStageWidth,
+  stageHeight,
+  setStageHeight,
 }: {
   notename: string;
   setNotename: any;
+  stageColor: string;
+  setStageColor: any;
+  stageWidth: number;
+  setStageWidth: any;
+  stageHeight: number;
+  setStageHeight: any;
 }) {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   return (
-    <div id="note-setting-control">
-      <Box bg="gray.100" w="200px" p={2} color="gray.600" borderRadius="xl">
-        <Input
-          placeholder="Note Name"
-          value={notename}
-          onChange={(e) => setNotename(e.target.value)}
-        />
-      </Box>
-    </div>
+    <>
+      <div id="note-setting-control">
+        <Box bg="gray.100" w="200px" p={2} color="gray.600" borderRadius="xl">
+          <Flex>
+            <Center>
+              <Input
+                placeholder="Note Name"
+                value={notename}
+                onChange={(e) => setNotename(e)}
+              />
+              <IconButton onClick={isOpen} icon={<MdSettings />} />
+            </Center>
+          </Flex>
+        </Box>
+      </div>
+      <Modal onClose={onClose} isOpen={isOpen} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Canvas Setting</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <NumberInput
+              w={28}
+              step={100}
+              value={stageWidth}
+              onChange={(e) => setStageWidth(e)}
+            >
+              <NumberInputField />
+              <NumberInputStepper>
+                <NumberIncrementStepper />
+                <NumberDecrementStepper />
+              </NumberInputStepper>
+            </NumberInput>
+            x
+            <NumberInput
+              w={32}
+              step={100}
+              value={stageHeight}
+              onChange={(e) => setStageHeight(e)}
+            >
+              <NumberInputField />
+              <NumberInputStepper>
+                <NumberIncrementStepper />
+                <NumberDecrementStepper />
+              </NumberInputStepper>
+            </NumberInput>
+            <input
+              type="color"
+              id="stageColor"
+              name="stageColor"
+              value={stageColor}
+              onChange={(e) => {
+                setStageColor(e.target.value);
+              }}
+            />
+          </ModalBody>
+          <ModalFooter>
+            <Button onClick={onClose}>Close</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
   );
 }

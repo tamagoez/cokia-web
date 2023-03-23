@@ -1,6 +1,6 @@
-import { FC, useRef, useState } from "react";
+import { FC, useRef, useState, useEffect } from "react";
 import Konva from "konva";
-import { Stage, Layer, Text, Line } from "react-konva";
+import { Stage, Layer, Text, Line, Rect } from "react-konva";
 // import { Box } from "@chakra-ui/react";
 
 export default function EditorCanvas({
@@ -10,6 +10,9 @@ export default function EditorCanvas({
   tension,
   penColor,
   stageRef,
+  stageX,
+  stageY,
+  stageColor,
 }: {
   tool: string;
   strokeWidth: number;
@@ -17,38 +20,33 @@ export default function EditorCanvas({
   tension: number;
   penColor: string;
   stageRef: any;
+  stageX: number;
+  stageY: number;
+  stageColor: string;
 }) {
   const [lines, setLines] = useState([]);
   const isDrawing = useRef(false);
 
   const [lastCenter, setLastCenter] = useState(null);
   const [lastDist, setLastDist] = useState(0);
-  Konva.hitOnDragEnabled = true;
+  // Konva.hitOnDragEnabled = true;
 
   const handleMouseDown = (e) => {
     e.evt.preventDefault();
     if (tool === "cursor") return;
     isDrawing.current = true;
     const pos = e.target.getStage().getPointerPosition();
+    const posX = Number(pos.x) + Number(stageX);
+    const posY = Number(pos.y) + Number(stageY);
     setLines([
       ...lines,
-      { tool, points: [pos.x, pos.y], strokeWidth, penColor, opacity },
+      { tool, points: [posX, posY], strokeWidth, penColor, opacity },
     ]);
+    updatePreview(stageRef);
   };
 
   const handleMouseMove = (e) => {
     e.evt.preventDefault();
-    if (null === "cursor") {
-      cursorMove(
-        e,
-        stageRef,
-        lastCenter,
-        (newState) => setLastCenter(newState),
-        lastDist,
-        (newState) => setLastDist(newState)
-      );
-      return;
-    }
     // no drawing - skipping
     if (!isDrawing.current) {
       return;
@@ -57,11 +55,14 @@ export default function EditorCanvas({
     const point = stage.getPointerPosition();
     let lastLine = lines[lines.length - 1];
     // add point
-    lastLine.points = lastLine.points.concat([point.x, point.y]);
+    const posX = Number(point.x) + Number(stageX);
+    const posY = Number(point.y) + Number(stageY);
+    lastLine.points = lastLine.points.concat([posX, posY]);
 
     // replace last
     lines.splice(lines.length - 1, 1, lastLine);
     setLines(lines.concat());
+    updatePreview(stageRef);
   };
 
   const handleMouseUp = () => {
@@ -69,10 +70,12 @@ export default function EditorCanvas({
     setLastDist(0);
     setLastCenter(null);
   };
+
   return (
     <>
       <style jsx global>{`
         .stage {
+          /* iOS等でのスクロール防止(cursor以外) */
           -ms-touch-action: none;
           touch-action: none;
           -moz-user-select: none;
@@ -80,16 +83,26 @@ export default function EditorCanvas({
           user-select: none;
           -webkit-touch-callout: none;
           -webkit-user-drag: none;
+          /* fixedのためz-indexはいらない */
           z-index: 10;
+          /* 画面全体を覆う */
           width: 100vw;
           height: 100vh;
           top: 0;
           left: 0;
         }
+        #preview {
+          background-color: #e0dfe1;
+          position: fixed;
+          top: 75px;
+          right: 15px;
+          opacity: 0.6;
+        }
       `}</style>
+      <img id="preview" />
       <Stage
-        width={window.innerWidth + 200}
-        height={window.innerHeight + 200}
+        width={window.innerWidth}
+        height={window.innerHeight}
         onMouseDown={handleMouseDown}
         onMousemove={handleMouseMove}
         onMouseup={handleMouseUp}
@@ -99,6 +112,8 @@ export default function EditorCanvas({
         className="stage"
         ref={stageRef}
         style={{ position: tool === "cursor" ? "fixed" : "fixed" }}
+        x={0 - stageX}
+        y={0 - stageY}
       >
         <Layer>
           {lines.map((line, i) => (
@@ -122,80 +137,10 @@ export default function EditorCanvas({
   );
 }
 
-function cursorMove(
-  e: any,
-  stageRef: any,
-  lastCenter,
-  setLastCenter,
-  lastDist,
-  setLastDist
-) {
-  alert(e.evt.touches.length);
-  function getDistance(p1, p2) {
-    return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
-  }
-
-  function getCenter(p1, p2) {
-    return {
-      x: (p1.x + p2.x) / 2,
-      y: (p1.y + p2.y) / 2,
-    };
-  }
+function updatePreview(stageRef: any) {
   const stage = stageRef.current;
-  const touch1 = e.evt.touches[0];
-  const touch2 = e.evt.touches[1];
-
-  if (touch1 && touch2) {
-    // if the stage was under Konva's drag&drop
-    // we need to stop it, and implement our own pan logic with two pointers
-    if (stage.isDragging()) {
-      stage.stopDrag();
-    }
-
-    var p1 = {
-      x: touch1.clientX,
-      y: touch1.clientY,
-    };
-    var p2 = {
-      x: touch2.clientX,
-      y: touch2.clientY,
-    };
-
-    if (!lastCenter) {
-      setLastCenter(getCenter(p1, p2));
-      return;
-    }
-    var newCenter = getCenter(p1, p2);
-
-    var dist = getDistance(p1, p2);
-
-    if (!lastDist) {
-      setLastDist(dist);
-    }
-
-    // local coordinates of center point
-    var pointTo = {
-      x: (newCenter.x - stage.x()) / stage.scaleX(),
-      y: (newCenter.y - stage.y()) / stage.scaleX(),
-    };
-
-    var scale = stage.scaleX() * (dist / lastDist);
-
-    stage.scaleX(scale);
-    stage.scaleY(scale);
-
-    // calculate new position of the stage
-    var dx = newCenter.x - lastCenter.x;
-    var dy = newCenter.y - lastCenter.y;
-
-    var newPos = {
-      x: newCenter.x - pointTo.x * scale + dx,
-      y: newCenter.y - pointTo.y * scale + dy,
-    };
-
-    stage.position(newPos);
-
-    setLastDist(dist);
-    setLastCenter(newCenter);
-  }
+  const scale = 1 / 12;
+  // use pixelRatio to generate smaller preview
+  const url = stage.toDataURL({ pixelRatio: scale });
+  document.getElementById("preview").src = url;
 }
