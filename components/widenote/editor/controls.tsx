@@ -333,7 +333,7 @@ function NoteSettingControl({
                 value={notename}
                 onChange={(e) => setNotename(e)}
               />
-              <IconButton onClick={isOpen} icon={<MdSettings />} />
+              <IconButton aria-label="Canvas Setting" onClick={onOpen} icon={<MdSettings />} />
             </Center>
           </Flex>
         </Box>
