@@ -76,6 +76,8 @@ export default function EditorControls({
         setStrokeWidth={(newstate) => setStrokeWidth(newstate)}
         penColor={penColor}
         setPenColor={(newstate) => setPenColor(newstate)}
+        opacity={opacity}
+        setOpacity={(newState) => setOpacity(newState)}
       />
       <NoteOptionControl stageRef={stageRef} notename={notename} />
       <NoteSettingControl
