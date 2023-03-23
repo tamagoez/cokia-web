@@ -27,6 +27,10 @@ export default function EditorControls({
   setStrokeWidth,
   penColor,
   setPenColor,
+  tension,
+  setTension,
+  opacity,
+  setOpacity,
 }: {
   stageRef: any;
   notename: string;
@@ -37,29 +41,35 @@ export default function EditorControls({
   setStrokeWidth: any;
   penColor: string;
   setPenColor: any;
+  tension: number;
+  setTension: any;
+  opacity: number;
+  setOpacity: any;
 }) {
   return (
     <>
-      <style jsx global>{`#cursor-mode-control {
-            position: fixed;
-            bottom: 10px;
-            left: 15px;
-            }     
-          #pen-option-control {
-            position: fixed;
-            bottom: 10px;
-            right: 15px;
-          }
-          #note-option-control {
-            position: fixed;
-            top: 10px;
-            right: 15px;
-          }
-          #note-setting-control {
-            position: fixed;
-            top: 10px;
-            left: 15px;
-          }`}</style>
+      <style jsx global>{`
+        #cursor-mode-control {
+          position: fixed;
+          bottom: 10px;
+          left: 15px;
+        }
+        #pen-option-control {
+          position: fixed;
+          bottom: 10px;
+          right: 15px;
+        }
+        #note-option-control {
+          position: fixed;
+          top: 10px;
+          right: 15px;
+        }
+        #note-setting-control {
+          position: fixed;
+          top: 10px;
+          left: 15px;
+        }
+      `}</style>
       <CursorModeControl tool={tool} setTool={setTool} />
       <PenOptionControl
         strokeWidth={strokeWidth}
@@ -113,11 +123,15 @@ function PenOptionControl({
   setStrokeWidth,
   penColor,
   setPenColor,
+  opacity,
+  setOpacity,
 }: {
   strokeWidth: number;
   setStrokeWidth: any;
   penColor: string;
   setPenColor: any;
+  opacity: number;
+  setOpacity: any;
 }) {
   return (
     <div id="pen-option-control">
@@ -161,6 +175,31 @@ function PenOptionControl({
                 w="14"
               >
                 {strokeWidth} pt
+              </SliderMark>
+              <SliderTrack>
+                <SliderFilledTrack />
+              </SliderTrack>
+              <SliderThumb />
+            </Slider>
+            <Slider
+              aria-label="slider-ex-1"
+              value={opacity * 100}
+              onChange={(val) => setOpacity(val / 100)}
+              min={0}
+              max={100}
+              step={1}
+              w="100%"
+            >
+              <SliderMark
+                value={strokeWidth}
+                textAlign="center"
+                bg="blue.500"
+                color="white"
+                mb="-10"
+                ml="-6"
+                w="14"
+              >
+                {opacity * 100} %
               </SliderMark>
               <SliderTrack>
                 <SliderFilledTrack />
