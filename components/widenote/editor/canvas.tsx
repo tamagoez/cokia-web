@@ -32,7 +32,7 @@ export default function EditorCanvas({
     const pos = e.target.getStage().getPointerPosition();
     setLines([
       ...lines,
-      { tool, points: [pos.x, pos.y], strokeWidth, penColor },
+      { tool, points: [pos.x, pos.y], strokeWidth, penColor, opacity },
     ]);
   };
 
@@ -102,7 +102,7 @@ export default function EditorCanvas({
               stroke={line.penColor}
               strokeWidth={line.strokeWidth}
               tension={tension}
-              opacity={opacity}
+              opacity={line.opacity}
               lineCap="round"
               lineJoin="round"
               globalCompositeOperation={
