@@ -3,7 +3,7 @@ import dynamic from "next/dynamic";
 import EditorControls from "./controls";
 import CanvasStage from "./stage";
 
-const EditorCanvas = dynamic(() => import("./canvas"), {
+const EditorCanvas = dynamic(() => import("./canvas/base"), {
   ssr: false,
 });
 
@@ -21,13 +21,14 @@ export default function EditorPage() {
   const [stageY, setStageY] = useState(1000);
   const [stageWidth, setStageWidth] = useState(0);
   const [stageHeight, setStageHeight] = useState(0);
+  const [activeLayer, setActiveLayer] = useState(1);
 
   useEffect(() => {
     setStageWidth(window.innerWidth + 2000);
     setStageHeight(window.innerHeight + 2000);
     setStageX(1000);
     setStageY(1000);
-    window.scroll(stageX, stageY);
+    window.scroll(1000, 1000);
   }, []);
   return (
     <>
@@ -54,6 +55,7 @@ export default function EditorPage() {
           stageX={stageX}
           stageY={stageY}
           stageColor={stageColor}
+          activeLayer={activeLayer}
         />
       </div>
       <div id="editor-controls">
@@ -77,6 +79,8 @@ export default function EditorPage() {
           setStageWidth={(newState) => setStageWidth(newState)}
           stageHeight={stageHeight}
           setStageHeight={(newState) => setStageHeight(newState)}
+          activeLayer={activeLayer}
+          setActiveLayer={(newState) => setActiveLayer(newState)}
         />
       </div>
     </>

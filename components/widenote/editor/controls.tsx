@@ -51,6 +51,8 @@ export default function EditorControls({
   setStageWidth,
   stageHeight,
   setStageHeight,
+  activeLayer,
+  setActiveLayer,
 }: {
   stageRef: any;
   notename: string;
@@ -71,6 +73,8 @@ export default function EditorControls({
   setStageWidth: any;
   stageHeight: number;
   setStageHeight: any;
+  activeLayer: number;
+  setActiveLayer: any;
 }) {
   return (
     <>
@@ -120,8 +124,22 @@ export default function EditorControls({
         stageHeight={stageHeight}
         setStageHeight={(newState) => setStageHeight(newState)}
       />
+      <LayerControl
+        activeLayer={activeLayer}
+        setActiveLayer={(newState) => setActiveLayer(newState)}
+      />
     </>
   );
+}
+
+function LayerControl({
+  activeLayer,
+  setActiveLayer,
+}: {
+  activeLayer: number;
+  setActiveLayer: any;
+}) {
+  return <></>;
 }
 
 function CursorModeControl({ tool, setTool }: { tool: string; setTool: any }) {
@@ -333,7 +351,11 @@ function NoteSettingControl({
                 value={notename}
                 onChange={(e) => setNotename(e)}
               />
-              <IconButton aria-label="Canvas Setting" onClick={onOpen} icon={<MdSettings />} />
+              <IconButton
+                aria-label="Canvas Setting"
+                onClick={onOpen}
+                icon={<MdSettings />}
+              />
             </Center>
           </Flex>
         </Box>
