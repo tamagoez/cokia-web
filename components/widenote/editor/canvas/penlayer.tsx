@@ -9,7 +9,7 @@ export default function PenLayer({
   allLines: any;
 }) {
   const lines = allLines.find((item) => item.id == id).data;
-  // console.log(lines);
+  console.log(lines);
   return (
     <>
       <Layer>

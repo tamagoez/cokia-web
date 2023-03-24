@@ -70,31 +70,32 @@ export default function EditorCanvas({
 
   const handleMouseMove = (e) => {
     e.evt.preventDefault();
-    // no drawing - skipping
     if (!isDrawing.current) {
       return;
     }
     const stage = e.target.getStage();
     const point = stage.getPointerPosition();
-    // let lastLine = lines[lines.length - 1];
-    // add point
     const posX = Number(point.x) + Number(stageX);
     const posY = Number(point.y) + Number(stageY);
     const objIndex = lines.findIndex((obj) => obj.id == activeLayer);
     if (objIndex !== -1) {
-      const newArr = [...lines]; // 配列をコピー
+      const newArr = [...lines];
       const thisLine = newArr[objIndex].data;
-      let lastLine = thisLine[thisLine.length - 1];
+      const lastLine = thisLine[thisLine.length - 1]; // ここを修正
       const newPoints = lastLine.points.concat([posX, posY]);
-      // thisLine.splice(thisLine.length - 1, 1, lastLine);
       const replaceArray = newArr.map((item) => {
         if (item.id === activeLayer) {
-          return { ...item, points: newPoints };
+          const newData = [...item.data];
+          newData.splice(newData.length - 1, 1, {
+            ...lastLine,
+            points: newPoints,
+          });
+          return { ...item, data: newData };
         } else {
           return item;
         }
       });
-      setLines(replaceArray); // ステートを更新
+      setLines(replaceArray);
     }
     updatePreview(stageRef);
   };
@@ -133,6 +134,9 @@ export default function EditorCanvas({
           opacity: 0.6;
         }
       `}</style>
+      <p style={{ position: "fixed", top: 70, left: 30 }}>
+        選択中レイヤーID: {activeLayer}
+      </p>
       <Stage
         width={window.innerWidth}
         height={window.innerHeight}
