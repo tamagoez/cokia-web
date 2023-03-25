@@ -3,7 +3,6 @@ import Konva from "konva";
 import { Stage, Layer, Text, Line, Rect } from "react-konva";
 import PenLayer from "./penlayer";
 
-
 export default function EditorCanvas({
   tool,
   strokeWidth,
@@ -31,9 +30,10 @@ export default function EditorCanvas({
   setLayers: any;
   activeLayer: number;
 }) {
-  
-
-  const [lines, setLines] = useState([{ id: 1, data: [] }]);
+  const [lines, setLines] = useState([
+    { id: 1, data: [] },
+    { id: 2, data: [] },
+  ]);
   const isDrawing = useRef(false);
 
   const [lastCenter, setLastCenter] = useState(null);
@@ -61,7 +61,7 @@ export default function EditorCanvas({
       setLines(newArr); // ステートを更新
     }
     // console.log(lines);
-    updatePreview(stageRef, layers, (newState) => setLayers(newState));
+    // updatePreview(stageRef, layers, (newState) => setLayers(newState));
   };
 
   const handleMouseMove = (e) => {
@@ -93,13 +93,14 @@ export default function EditorCanvas({
       });
       setLines(replaceArray);
     }
-    updatePreview(stageRef, layers, (newState) => setLayers(newState));
+    // updatePreview(stageRef, layers, (newState) => setLayers(newState));
   };
 
   const handleMouseUp = () => {
     isDrawing.current = false;
     setLastDist(0);
     setLastCenter(null);
+    updatePreview(stageRef, layers, (newState) => setLayers(newState));
   };
 
   return (
@@ -133,6 +134,7 @@ export default function EditorCanvas({
       <p style={{ position: "fixed", top: 70, left: 30 }}>
         選択中レイヤーID: {activeLayer}
       </p>
+      <img id="preview" />
       <Stage
         width={window.innerWidth}
         height={window.innerHeight}
@@ -150,7 +152,14 @@ export default function EditorCanvas({
       >
         {layers.map((layer, index) => {
           if (layer.type === "pen") {
-            return <PenLayer key={index} id={layer.id} allLines={lines} />;
+            return (
+              <PenLayer
+                key={index}
+                id={layer.id}
+                allLines={lines}
+                option={layer}
+              />
+            );
           }
         })}
       </Stage>
@@ -158,14 +167,14 @@ export default function EditorCanvas({
   );
 }
 
-function updatePreview(stageRef: any, layers: any, setLayers: any,) {
-  return;
+function updatePreview(stageRef: any, layers: any, setLayers: any) {
+  // return;
   const stage = stageRef.current;
   const scale = 1 / 12;
   // use pixelRatio to generate smaller preview
   const url = stage.toDataURL({ pixelRatio: scale });
-  // (document.getElementById("layer-1-img") as HTMLImageElement).src = url;
-  let layerdata = layers
-  layerdata[0].img = url
-  setLayers(layerdata)
+  (document.getElementById("preview") as HTMLImageElement).src = url;
+  let layerdata = layers;
+  // layerdata[0].img = url;
+  setLayers(layerdata);
 }

@@ -14,6 +14,8 @@ interface LayerOption {
   type: string;
   zOrder: number;
   img: string;
+  visible: boolean;
+  opacity: number;
 }
 
 export default function EditorPage() {
@@ -32,7 +34,24 @@ export default function EditorPage() {
   const [stageHeight, setStageHeight] = useState(0);
   const [activeLayer, setActiveLayer] = useState(1);
   const [layers, setLayers] = useState<LayerOption[]>([
-    { id: 1, name: "a", type: "pen", zOrder: 0, img: "" },
+    {
+      id: 1,
+      name: "a",
+      type: "pen",
+      zOrder: 0,
+      img: "",
+      visible: true,
+      opacity: 1,
+    },
+    {
+      id: 2,
+      name: "b",
+      type: "pen",
+      zOrder: 0,
+      img: "",
+      visible: true,
+      opacity: 0.8,
+    },
   ]);
 
   useEffect(() => {

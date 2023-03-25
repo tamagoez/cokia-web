@@ -3,16 +3,18 @@ import { Stage, Layer, Text, Line, Rect } from "react-konva";
 
 export default function PenLayer({
   id,
+  option,
   allLines,
 }: {
   id: number;
+  option: any;
   allLines: any;
 }) {
   const lines = allLines.find((item) => item.id == id).data;
   console.log(lines);
   return (
     <>
-      <Layer>
+      <Layer visible={option.visible} opacity={option.opacity}>
         {lines.map((line, i) => (
           <Line
             key={i}

@@ -382,31 +382,33 @@ function NoteSettingControl({
           <ModalHeader>Canvas Setting</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <NumberInput
-              w={28}
-              step={100}
-              value={stageWidth}
-              onChange={(e) => setStageWidth(e)}
-            >
-              <NumberInputField />
-              <NumberInputStepper>
-                <NumberIncrementStepper />
-                <NumberDecrementStepper />
-              </NumberInputStepper>
-            </NumberInput>
-            x
-            <NumberInput
-              w={32}
-              step={100}
-              value={stageHeight}
-              onChange={(e) => setStageHeight(e)}
-            >
-              <NumberInputField />
-              <NumberInputStepper>
-                <NumberIncrementStepper />
-                <NumberDecrementStepper />
-              </NumberInputStepper>
-            </NumberInput>
+            <Flex>
+              <NumberInput
+                w={28}
+                step={100}
+                value={stageWidth}
+                onChange={(e) => setStageWidth(e)}
+              >
+                <NumberInputField />
+                <NumberInputStepper>
+                  <NumberIncrementStepper />
+                  <NumberDecrementStepper />
+                </NumberInputStepper>
+              </NumberInput>
+              x
+              <NumberInput
+                w={32}
+                step={100}
+                value={stageHeight}
+                onChange={(e) => setStageHeight(e)}
+              >
+                <NumberInputField />
+                <NumberInputStepper>
+                  <NumberIncrementStepper />
+                  <NumberDecrementStepper />
+                </NumberInputStepper>
+              </NumberInput>
+            </Flex>
             <input
               type="color"
               id="stageColor"
@@ -459,12 +461,12 @@ function LayerDrawer({
           <DrawerHeader>Layer</DrawerHeader>
 
           <DrawerBody>
-            {layers.map((x) => 
+            {layers.map((x) => (
               <Card
                 direction={{ base: "column", sm: "row" }}
                 overflow="hidden"
                 variant="outline"
-                onClick={() => setLayers(x.id)}
+                onClick={() => setActiveLayer(x.id)}
               >
                 <img id={`layer-${x.id}-img`} src="" title="Preview" />
 
@@ -472,13 +474,12 @@ function LayerDrawer({
                   <CardBody>
                     <Heading size="md">{x.name}</Heading>
                     <Button variant="solid" colorScheme="blue">
-                     Select
+                      Select
                     </Button>
                   </CardBody>
-
                 </Stack>
               </Card>
-            )}
+            ))}
           </DrawerBody>
 
           <DrawerFooter>
