@@ -2,10 +2,19 @@ import { useState, useRef, useEffect } from "react";
 import dynamic from "next/dynamic";
 import EditorControls from "./controls";
 import CanvasStage from "./stage";
+import { AlertOnClose } from "../../ui/alert";
 
 const EditorCanvas = dynamic(() => import("./canvas/base"), {
   ssr: false,
 });
+
+interface LayerOption {
+  id: number;
+  name: string;
+  type: string;
+  zOrder: number;
+  img: string;
+}
 
 export default function EditorPage() {
   const stageRef = useRef(null);
@@ -22,6 +31,9 @@ export default function EditorPage() {
   const [stageWidth, setStageWidth] = useState(0);
   const [stageHeight, setStageHeight] = useState(0);
   const [activeLayer, setActiveLayer] = useState(1);
+  const [layers, setLayers] = useState<LayerOption[]>([
+    { id: 1, name: "a", type: "pen", zOrder: 0, img: "" },
+  ]);
 
   useEffect(() => {
     setStageWidth(window.innerWidth + 2000);
@@ -32,6 +44,7 @@ export default function EditorPage() {
   }, []);
   return (
     <>
+      <AlertOnClose />
       <CanvasStage
         tool={tool}
         leftPadding={leftPadding}
@@ -55,6 +68,8 @@ export default function EditorPage() {
           stageX={stageX}
           stageY={stageY}
           stageColor={stageColor}
+          layers={layers}
+          setLayers={(newState) => setLayers(newState)}
           activeLayer={activeLayer}
         />
       </div>
@@ -79,6 +94,8 @@ export default function EditorPage() {
           setStageWidth={(newState) => setStageWidth(newState)}
           stageHeight={stageHeight}
           setStageHeight={(newState) => setStageHeight(newState)}
+          layers={layers}
+          setLayers={(newState) => setLayers(newState)}
           activeLayer={activeLayer}
           setActiveLayer={(newState) => setActiveLayer(newState)}
         />

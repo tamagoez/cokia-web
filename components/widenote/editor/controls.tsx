@@ -27,7 +27,21 @@ import {
   ModalCloseButton,
   useDisclosure,
   Button,
+  Drawer,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
+  DrawerHeader,
+  DrawerBody,
+  DrawerFooter,
+  Card,
+  Stack,
+  CardBody,
+  CardFooter,
+  Heading,
+  Text,
 } from "@chakra-ui/react";
+import { useRef } from "react";
 import { FaPen, FaEraser, FaArrowsAlt } from "react-icons/fa";
 import { MdIosShare, MdSettings } from "react-icons/md";
 
@@ -51,6 +65,8 @@ export default function EditorControls({
   setStageWidth,
   stageHeight,
   setStageHeight,
+  layers,
+  setLayers,
   activeLayer,
   setActiveLayer,
 }: {
@@ -73,6 +89,8 @@ export default function EditorControls({
   setStageWidth: any;
   stageHeight: number;
   setStageHeight: any;
+  layers: any;
+  setLayers: any;
   activeLayer: number;
   setActiveLayer: any;
 }) {
@@ -103,6 +121,12 @@ export default function EditorControls({
           left: 15px;
           z-index: 1000;
         }
+        #layer-call-control {
+          position: fixed;
+          bottom: 100px;
+          right: 0;
+          z-index: 1000;
+        }
       `}</style>
       <CursorModeControl tool={tool} setTool={setTool} />
       <PenOptionControl
@@ -124,22 +148,14 @@ export default function EditorControls({
         stageHeight={stageHeight}
         setStageHeight={(newState) => setStageHeight(newState)}
       />
-      <LayerControl
+      <LayerDrawer
+        layers={layers}
+        setLayers={(newState) => setLayers(newState)}
         activeLayer={activeLayer}
         setActiveLayer={(newState) => setActiveLayer(newState)}
       />
     </>
   );
-}
-
-function LayerControl({
-  activeLayer,
-  setActiveLayer,
-}: {
-  activeLayer: number;
-  setActiveLayer: any;
-}) {
-  return <></>;
 }
 
 function CursorModeControl({ tool, setTool }: { tool: string; setTool: any }) {
@@ -406,6 +422,73 @@ function NoteSettingControl({
           </ModalFooter>
         </ModalContent>
       </Modal>
+    </>
+  );
+}
+
+function LayerDrawer({
+  layers,
+  setLayers,
+  activeLayer,
+  setActiveLayer,
+}: {
+  layers: any;
+  setLayers: any;
+  activeLayer: number;
+  setActiveLayer: any;
+}) {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const btnRef = useRef();
+
+  return (
+    <>
+      <div id="layer-call-control">
+        <Button ref={btnRef} colorScheme="teal" onClick={onOpen}>
+          Layer
+        </Button>
+      </div>
+      <Drawer
+        isOpen={isOpen}
+        placement="right"
+        onClose={onClose}
+        finalFocusRef={btnRef}
+      >
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerCloseButton />
+          <DrawerHeader>Layer</DrawerHeader>
+
+          <DrawerBody>
+            {layers.map((x) => 
+              <Card
+                direction={{ base: "column", sm: "row" }}
+                overflow="hidden"
+                variant="outline"
+                onClick={() => setLayers(x.id)}
+              >
+                <img id={`layer-${x.id}-img`} src="" title="Preview" />
+
+                <Stack>
+                  <CardBody>
+                    <Heading size="md">{x.name}</Heading>
+                    <Button variant="solid" colorScheme="blue">
+                     Select
+                    </Button>
+                  </CardBody>
+
+                </Stack>
+              </Card>
+            )}
+          </DrawerBody>
+
+          <DrawerFooter>
+            <Button variant="outline" mr={3} onClick={onClose}>
+              Cancel
+            </Button>
+            <Button colorScheme="blue">Save</Button>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
     </>
   );
 }

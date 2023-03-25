@@ -3,12 +3,6 @@ import Konva from "konva";
 import { Stage, Layer, Text, Line, Rect } from "react-konva";
 import PenLayer from "./penlayer";
 
-interface LayerOption {
-  id: number;
-  name: string;
-  type: string;
-  zOrder: number;
-}
 
 export default function EditorCanvas({
   tool,
@@ -20,7 +14,9 @@ export default function EditorCanvas({
   stageX,
   stageY,
   stageColor,
+  layers,
   activeLayer,
+  setLayers,
 }: {
   tool: string;
   strokeWidth: number;
@@ -31,11 +27,11 @@ export default function EditorCanvas({
   stageX: number;
   stageY: number;
   stageColor: string;
+  layers: any;
+  setLayers: any;
   activeLayer: number;
 }) {
-  const [layers, setLayers] = useState<LayerOption[]>([
-    { id: 1, name: "a", type: "pen", zOrder: 0 },
-  ]);
+  
 
   const [lines, setLines] = useState([{ id: 1, data: [] }]);
   const isDrawing = useRef(false);
@@ -65,7 +61,7 @@ export default function EditorCanvas({
       setLines(newArr); // ステートを更新
     }
     // console.log(lines);
-    updatePreview(stageRef);
+    updatePreview(stageRef, layers, (newState) => setLayers(newState));
   };
 
   const handleMouseMove = (e) => {
@@ -97,7 +93,7 @@ export default function EditorCanvas({
       });
       setLines(replaceArray);
     }
-    updatePreview(stageRef);
+    updatePreview(stageRef, layers, (newState) => setLayers(newState));
   };
 
   const handleMouseUp = () => {
@@ -162,11 +158,14 @@ export default function EditorCanvas({
   );
 }
 
-function updatePreview(stageRef: any) {
+function updatePreview(stageRef: any, layers: any, setLayers: any,) {
   return;
   const stage = stageRef.current;
   const scale = 1 / 12;
   // use pixelRatio to generate smaller preview
   const url = stage.toDataURL({ pixelRatio: scale });
-  (document.getElementById("preview") as HTMLImageElement).src = url;
+  // (document.getElementById("layer-1-img") as HTMLImageElement).src = url;
+  let layerdata = layers
+  layerdata[0].img = url
+  setLayers(layerdata)
 }
