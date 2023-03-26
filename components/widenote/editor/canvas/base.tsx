@@ -1,7 +1,7 @@
 import { FC, useRef, useState, useEffect } from "react";
 import Konva from "konva";
 import { Stage, Layer, Text, Line, Rect } from "react-konva";
-// import { Box } from "@chakra-ui/react";
+import PenLayer from "./penlayer";
 
 export default function EditorCanvas({
   tool,
@@ -13,6 +13,9 @@ export default function EditorCanvas({
   stageX,
   stageY,
   stageColor,
+  layers,
+  activeLayer,
+  setLayers,
 }: {
   tool: string;
   strokeWidth: number;
@@ -23,8 +26,18 @@ export default function EditorCanvas({
   stageX: number;
   stageY: number;
   stageColor: string;
+  layers: any;
+  setLayers: any;
+  activeLayer: number;
 }) {
-  const [lines, setLines] = useState([]);
+  const [lines, setLines] = useState([
+    { id: 1, data: [] },
+    { id: 2, data: [] },
+    { id: 3, data: [] },
+    { id: 4, data: [] },
+    { id: 5, data: [] },
+    { id: 6, data: [] },
+  ]);
   const isDrawing = useRef(false);
 
   const [lastCenter, setLastCenter] = useState(null);
@@ -38,37 +51,60 @@ export default function EditorCanvas({
     const pos = e.target.getStage().getPointerPosition();
     const posX = Number(pos.x) + Number(stageX);
     const posY = Number(pos.y) + Number(stageY);
-    setLines([
-      ...lines,
-      { tool, points: [posX, posY], strokeWidth, penColor, opacity },
-    ]);
-    updatePreview(stageRef);
+
+    const objIndex = lines.findIndex((obj) => obj.id == activeLayer);
+    if (objIndex !== -1) {
+      const newArr = [...lines]; // 配列をコピー
+      newArr[objIndex].data.push({
+        tool,
+        points: [posX, posY],
+        strokeWidth,
+        penColor,
+        opacity,
+      }); // 新しいオブジェクトを追加
+      setLines(newArr); // ステートを更新
+    }
+    // console.log(lines);
+    // updatePreview(stageRef, layers, (newState) => setLayers(newState));
   };
 
   const handleMouseMove = (e) => {
     e.evt.preventDefault();
-    // no drawing - skipping
     if (!isDrawing.current) {
       return;
     }
     const stage = e.target.getStage();
     const point = stage.getPointerPosition();
-    let lastLine = lines[lines.length - 1];
-    // add point
     const posX = Number(point.x) + Number(stageX);
     const posY = Number(point.y) + Number(stageY);
-    lastLine.points = lastLine.points.concat([posX, posY]);
-
-    // replace last
-    lines.splice(lines.length - 1, 1, lastLine);
-    setLines(lines.concat());
-    updatePreview(stageRef);
+    const objIndex = lines.findIndex((obj) => obj.id == activeLayer);
+    if (objIndex !== -1) {
+      const newArr = [...lines];
+      const thisLine = newArr[objIndex].data;
+      const lastLine = thisLine[thisLine.length - 1]; // ここを修正
+      const newPoints = lastLine.points.concat([posX, posY]);
+      const replaceArray = newArr.map((item) => {
+        if (item.id === activeLayer) {
+          const newData = [...item.data];
+          newData.splice(newData.length - 1, 1, {
+            ...lastLine,
+            points: newPoints,
+          });
+          return { ...item, data: newData };
+        } else {
+          return item;
+        }
+      });
+      setLines(replaceArray);
+    }
+    // updatePreview(stageRef, layers, (newState) => setLayers(newState));
   };
 
   const handleMouseUp = () => {
     isDrawing.current = false;
     setLastDist(0);
     setLastCenter(null);
+    updatePreview(stageRef, layers, (newState) => setLayers(newState));
   };
 
   return (
@@ -99,48 +135,50 @@ export default function EditorCanvas({
           opacity: 0.6;
         }
       `}</style>
+      <p style={{ position: "fixed", top: 70, left: 30 }}>
+        選択中レイヤーID: {activeLayer}
+      </p>
       <img id="preview" />
       <Stage
         width={window.innerWidth}
         height={window.innerHeight}
+        className="stage"
+        ref={stageRef}
+        style={{ position: tool === "cursor" ? "fixed" : "fixed" }}
+        x={0 - stageX}
+        y={0 - stageY}
         onMouseDown={handleMouseDown}
         onMousemove={handleMouseMove}
         onMouseup={handleMouseUp}
         onTouchStart={handleMouseDown}
         onTouchMove={handleMouseMove}
         onTouchEnd={handleMouseUp}
-        className="stage"
-        ref={stageRef}
-        style={{ position: tool === "cursor" ? "fixed" : "fixed" }}
-        x={0 - stageX}
-        y={0 - stageY}
       >
-        <Layer>
-          {lines.map((line, i) => (
-            <Line
-              key={i}
-              points={line.points}
-              stroke={line.penColor}
-              strokeWidth={line.strokeWidth}
-              tension={tension}
-              opacity={line.opacity}
-              lineCap="round"
-              lineJoin="round"
-              globalCompositeOperation={
-                line.tool === "eraser" ? "destination-out" : "source-over"
-              }
-            />
-          ))}
-        </Layer>
+        {layers.map((layer, index) => {
+          if (layer.type === "pen") {
+            return (
+              <PenLayer
+                key={index}
+                id={layer.id}
+                allLines={lines}
+                option={layer}
+              />
+            );
+          }
+        })}
       </Stage>
     </>
   );
 }
 
-function updatePreview(stageRef: any) {
+function updatePreview(stageRef: any, layers: any, setLayers: any) {
+  // return;
   const stage = stageRef.current;
   const scale = 1 / 12;
   // use pixelRatio to generate smaller preview
   const url = stage.toDataURL({ pixelRatio: scale });
   (document.getElementById("preview") as HTMLImageElement).src = url;
+  let layerdata = layers;
+  // layerdata[0].img = url;
+  setLayers(layerdata);
 }

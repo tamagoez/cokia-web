@@ -27,9 +27,24 @@ import {
   ModalCloseButton,
   useDisclosure,
   Button,
+  Drawer,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
+  DrawerHeader,
+  DrawerBody,
+  DrawerFooter,
+  Card,
+  Stack,
+  CardBody,
+  CardFooter,
+  Heading,
+  Text,
 } from "@chakra-ui/react";
+import { useRef } from "react";
 import { FaPen, FaEraser, FaArrowsAlt } from "react-icons/fa";
 import { MdIosShare, MdSettings } from "react-icons/md";
+import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 
 export default function EditorControls({
   stageRef,
@@ -51,6 +66,14 @@ export default function EditorControls({
   setStageWidth,
   stageHeight,
   setStageHeight,
+  layers,
+  setLayers,
+  activeLayer,
+  setActiveLayer,
+  stageX,
+  stageY,
+  setStageX,
+  setStageY,
 }: {
   stageRef: any;
   notename: string;
@@ -71,6 +94,14 @@ export default function EditorControls({
   setStageWidth: any;
   stageHeight: number;
   setStageHeight: any;
+  layers: any;
+  setLayers: any;
+  activeLayer: number;
+  setActiveLayer: any;
+  stageX: number;
+  stageY: number;
+  setStageX: any;
+  setStageY: any;
 }) {
   return (
     <>
@@ -99,6 +130,12 @@ export default function EditorControls({
           left: 15px;
           z-index: 1000;
         }
+        #layer-call-control {
+          position: fixed;
+          bottom: 100px;
+          right: 0;
+          z-index: 1000;
+        }
       `}</style>
       <CursorModeControl tool={tool} setTool={setTool} />
       <PenOptionControl
@@ -109,7 +146,16 @@ export default function EditorControls({
         opacity={opacity}
         setOpacity={(newState) => setOpacity(newState)}
       />
-      <NoteOptionControl stageRef={stageRef} notename={notename} />
+      <NoteOptionControl
+        stageRef={stageRef}
+        notename={notename}
+        stageWidth={stageWidth}
+        stageHeight={stageHeight}
+        stageX={stageX}
+        stageY={stageY}
+        setStageX={(newState) => setStageX(newState)}
+        setStageY={(newState) => setStageY(newState)}
+      />
       <NoteSettingControl
         notename={notename}
         setNotename={(newstate) => setNotename(newstate)}
@@ -119,6 +165,12 @@ export default function EditorControls({
         setStageWidth={(newState) => setStageWidth(newState)}
         stageHeight={stageHeight}
         setStageHeight={(newState) => setStageHeight(newState)}
+      />
+      <LayerDrawer
+        layers={layers}
+        setLayers={(newState) => setLayers(newState)}
+        activeLayer={activeLayer}
+        setActiveLayer={(newState) => setActiveLayer(newState)}
       />
     </>
   );
@@ -254,16 +306,38 @@ function PenOptionControl({
 function NoteOptionControl({
   stageRef,
   notename,
+  stageWidth,
+  stageHeight,
+  stageX,
+  stageY,
+  setStageX,
+  setStageY,
 }: {
   stageRef: any;
   notename: string;
+  stageWidth: number;
+  stageHeight: number;
+  stageX: number;
+  stageY: number;
+  setStageX: any;
+  setStageY: any;
 }) {
   function downloadImg() {
     const name = notename;
+    stageRef.current.width(stageWidth);
+    stageRef.current.height(stageHeight);
+    const nowposX = stageRef.current.x();
+    const nowposY = stageRef.current.y();
+    stageRef.current.x(0);
+    stageRef.current.y(0);
     const uri = stageRef.current.toDataURL({
       pixelRatio: window.devicePixelRatio,
     });
     downloadUri(name, uri);
+    stageRef.current.width(window.innerWidth);
+    stageRef.current.height(window.innerHeight);
+    setStageX(nowposX);
+    setStageY(nowposY);
   }
   function downloadJSON() {
     const json = JSON.stringify(stageRef.current.toJSON());
@@ -333,7 +407,11 @@ function NoteSettingControl({
                 value={notename}
                 onChange={(e) => setNotename(e)}
               />
-              <IconButton aria-label="Canvas Setting" onClick={onOpen} icon={<MdSettings />} />
+              <IconButton
+                aria-label="Canvas Setting"
+                onClick={onOpen}
+                icon={<MdSettings />}
+              />
             </Center>
           </Flex>
         </Box>
@@ -344,31 +422,33 @@ function NoteSettingControl({
           <ModalHeader>Canvas Setting</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <NumberInput
-              w={28}
-              step={100}
-              value={stageWidth}
-              onChange={(e) => setStageWidth(e)}
-            >
-              <NumberInputField />
-              <NumberInputStepper>
-                <NumberIncrementStepper />
-                <NumberDecrementStepper />
-              </NumberInputStepper>
-            </NumberInput>
-            x
-            <NumberInput
-              w={32}
-              step={100}
-              value={stageHeight}
-              onChange={(e) => setStageHeight(e)}
-            >
-              <NumberInputField />
-              <NumberInputStepper>
-                <NumberIncrementStepper />
-                <NumberDecrementStepper />
-              </NumberInputStepper>
-            </NumberInput>
+            <Flex>
+              <NumberInput
+                w={28}
+                step={100}
+                value={stageWidth}
+                onChange={(e) => setStageWidth(e)}
+              >
+                <NumberInputField />
+                <NumberInputStepper>
+                  <NumberIncrementStepper />
+                  <NumberDecrementStepper />
+                </NumberInputStepper>
+              </NumberInput>
+              x
+              <NumberInput
+                w={32}
+                step={100}
+                value={stageHeight}
+                onChange={(e) => setStageHeight(e)}
+              >
+                <NumberInputField />
+                <NumberInputStepper>
+                  <NumberIncrementStepper />
+                  <NumberDecrementStepper />
+                </NumberInputStepper>
+              </NumberInput>
+            </Flex>
             <input
               type="color"
               id="stageColor"
@@ -384,6 +464,73 @@ function NoteSettingControl({
           </ModalFooter>
         </ModalContent>
       </Modal>
+    </>
+  );
+}
+
+function LayerDrawer({
+  layers,
+  setLayers,
+  activeLayer,
+  setActiveLayer,
+}: {
+  layers: any;
+  setLayers: any;
+  activeLayer: number;
+  setActiveLayer: any;
+}) {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const btnRef = useRef();
+
+  return (
+    <>
+      <div id="layer-call-control">
+        <Button ref={btnRef} colorScheme="blackAlpha" onClick={onOpen}>
+          {layers[activeLayer - 1].name}
+        </Button>
+      </div>
+      <Drawer
+        isOpen={isOpen}
+        placement="right"
+        onClose={onClose}
+        finalFocusRef={btnRef}
+      >
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerCloseButton />
+          <DrawerHeader>Layer</DrawerHeader>
+
+          <DrawerBody>
+            {layers.map((x) => (
+              <Card
+                direction={{ base: "column", sm: "row" }}
+                overflow="hidden"
+                variant="outline"
+                onClick={() => setActiveLayer(x.id)}
+                backgroundColor={activeLayer == x.id ? "gray.100" : undefined}
+              >
+                <Stack>
+                  <CardBody>
+                    <Heading size="md">{x.name}</Heading>
+                    <IconButton
+                      variant="solid"
+                      aria-label="visible"
+                      icon={x.visible ? <IoEyeOutline /> : <IoEyeOffOutline />}
+                      colorScheme="gray"
+                    />
+                  </CardBody>
+                </Stack>
+              </Card>
+            ))}
+          </DrawerBody>
+
+          <DrawerFooter>
+            <Button variant="outline" onClick={onClose}>
+              Close
+            </Button>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
     </>
   );
 }
