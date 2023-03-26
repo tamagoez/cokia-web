@@ -29,7 +29,7 @@ export default function CanvasStage({
       const handleScroll = () => {
         setStageX(window.pageXOffset);
         setStageY(window.pageYOffset);
-        console.log(window.pageXOffset);
+        // console.log(window.pageXOffset);
       };
       window.addEventListener("scroll", handleScroll);
       handleScroll();

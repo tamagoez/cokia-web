@@ -44,6 +44,7 @@ import {
 import { useRef } from "react";
 import { FaPen, FaEraser, FaArrowsAlt } from "react-icons/fa";
 import { MdIosShare, MdSettings } from "react-icons/md";
+import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 
 export default function EditorControls({
   stageRef,
@@ -484,8 +485,8 @@ function LayerDrawer({
   return (
     <>
       <div id="layer-call-control">
-        <Button ref={btnRef} colorScheme="teal" onClick={onOpen}>
-          Layer
+        <Button ref={btnRef} colorScheme="blackAlpha" onClick={onOpen}>
+          {layers[activeLayer - 1].name}
         </Button>
       </div>
       <Drawer
@@ -506,15 +507,17 @@ function LayerDrawer({
                 overflow="hidden"
                 variant="outline"
                 onClick={() => setActiveLayer(x.id)}
+                backgroundColor={activeLayer == x.id ? "gray.100" : undefined}
               >
-                <img id={`layer-${x.id}-img`} src="" title="Preview" />
-
                 <Stack>
                   <CardBody>
                     <Heading size="md">{x.name}</Heading>
-                    <Button variant="solid" colorScheme="blue">
-                      Select
-                    </Button>
+                    <IconButton
+                      variant="solid"
+                      aria-label="visible"
+                      icon={x.visible ? <IoEyeOutline /> : <IoEyeOffOutline />}
+                      colorScheme="gray"
+                    />
                   </CardBody>
                 </Stack>
               </Card>
@@ -522,10 +525,9 @@ function LayerDrawer({
           </DrawerBody>
 
           <DrawerFooter>
-            <Button variant="outline" mr={3} onClick={onClose}>
-              Cancel
+            <Button variant="outline" onClick={onClose}>
+              Close
             </Button>
-            <Button colorScheme="blue">Save</Button>
           </DrawerFooter>
         </DrawerContent>
       </Drawer>
