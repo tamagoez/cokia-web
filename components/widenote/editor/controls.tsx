@@ -69,6 +69,10 @@ export default function EditorControls({
   setLayers,
   activeLayer,
   setActiveLayer,
+  stageX,
+  stageY,
+  setStageX,
+  setStageY,
 }: {
   stageRef: any;
   notename: string;
@@ -93,6 +97,10 @@ export default function EditorControls({
   setLayers: any;
   activeLayer: number;
   setActiveLayer: any;
+  stageX: number;
+  stageY: number;
+  setStageX: any;
+  setStageY: any;
 }) {
   return (
     <>
@@ -137,7 +145,16 @@ export default function EditorControls({
         opacity={opacity}
         setOpacity={(newState) => setOpacity(newState)}
       />
-      <NoteOptionControl stageRef={stageRef} notename={notename} />
+      <NoteOptionControl
+        stageRef={stageRef}
+        notename={notename}
+        stageWidth={stageWidth}
+        stageHeight={stageHeight}
+        stageX={stageX}
+        stageY={stageY}
+        setStageX={(newState) => setStageX(newState)}
+        setStageY={(newState) => setStageY(newState)}
+      />
       <NoteSettingControl
         notename={notename}
         setNotename={(newstate) => setNotename(newstate)}
@@ -288,16 +305,38 @@ function PenOptionControl({
 function NoteOptionControl({
   stageRef,
   notename,
+  stageWidth,
+  stageHeight,
+  stageX,
+  stageY,
+  setStageX,
+  setStageY,
 }: {
   stageRef: any;
   notename: string;
+  stageWidth: number;
+  stageHeight: number;
+  stageX: number;
+  stageY: number;
+  setStageX: any;
+  setStageY: any;
 }) {
   function downloadImg() {
     const name = notename;
+    stageRef.current.width(stageWidth);
+    stageRef.current.height(stageHeight);
+    const nowposX = stageRef.current.x();
+    const nowposY = stageRef.current.y();
+    stageRef.current.x(0);
+    stageRef.current.y(0);
     const uri = stageRef.current.toDataURL({
       pixelRatio: window.devicePixelRatio,
     });
     downloadUri(name, uri);
+    stageRef.current.width(window.innerWidth);
+    stageRef.current.height(window.innerHeight);
+    setStageX(nowposX);
+    setStageY(nowposY);
   }
   function downloadJSON() {
     const json = JSON.stringify(stageRef.current.toJSON());

@@ -117,6 +117,10 @@ export default function EditorPage() {
           setLayers={(newState) => setLayers(newState)}
           activeLayer={activeLayer}
           setActiveLayer={(newState) => setActiveLayer(newState)}
+          stageX={stageX}
+          stageY={stageY}
+          setStageX={(newState) => setStageX(newState)}
+          setStageY={(newState) => setStageY(newState)}
         />
       </div>
     </>
